@@ -1,0 +1,149 @@
+﻿@model IEnumerable<ShiftManagerProject.Models.ScheduleParameters>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/ScheduleParameters.css" />
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+        </div>
+        <div class="col-9">
+        </div>
+        <div class="col">
+            @if (ViewBag.WeekP == 1)
+            {
+                @Html.ActionLink("Create per Day", "DayCreate", "ScheduleParameters", null, new { @class = "btn btn-success" })
+            }
+            else
+            {
+                @Html.ActionLink("Create per Week", "WeekCreate", "ScheduleParameters", null, new { @class = "btn btn-success" })
+            }
+        </div>
+    </div>
+</div>
+
+<br />
+<h4>Week Settings</h4>
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Morning)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Afternoon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Night)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Where(f => f.Day == null))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Morning)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Afternoon)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Night)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "badge badge-success" })
+                    @if (item.Day != null)
+                    {@Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "badge badge-danger" })}
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<br /><br />
+<h4>Day Settings</h4>
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Day)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DMorning)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DAfternoon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DNight)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Where(f => f.Day != null))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Day)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DMorning)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DAfternoon)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DNight)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "badge badge-success" })
+                    @if (item.Day != null)
+                    {@Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "badge badge-danger" })}
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<br /><br />
+<h4>Maximum Shifts</h4>
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxMorning)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxAfternoon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxNight)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Where(f => f.Day == null))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaxMorning)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaxAfternoon)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaxNight)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID, WhichEdit = true }, new { @class = "badge badge-success" })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<br /><br />

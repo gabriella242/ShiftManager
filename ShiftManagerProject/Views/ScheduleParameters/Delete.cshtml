@@ -1,0 +1,78 @@
+﻿@model ShiftManagerProject.Models.ScheduleParameters
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 style="text-align:center;">Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Morning)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Morning)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Afternoon)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Afternoon)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Night)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Night)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Day)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Day)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DMorning)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DMorning)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DAfternoon)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DAfternoon)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DNight)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DNight)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

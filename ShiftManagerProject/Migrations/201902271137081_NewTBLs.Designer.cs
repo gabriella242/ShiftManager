@@ -7,13 +7,13 @@ namespace ShiftManagerProject.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class fixchanges : IMigrationMetadata
+    public sealed partial class NewTBLs : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(fixchanges));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(NewTBLs));
         
         string IMigrationMetadata.Id
         {
-            get { return "201902181042029_fixchanges"; }
+            get { return "201902271137081_NewTBLs"; }
         }
         
         string IMigrationMetadata.Source

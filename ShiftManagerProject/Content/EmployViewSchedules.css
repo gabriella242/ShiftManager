@@ -11,3 +11,9 @@
 .tblcontext {
     font-weight: 600;
 }
+
+.msg {
+    text-align: center;
+    color: blueviolet;
+    font-family: 'Coiny', cursive;
+}

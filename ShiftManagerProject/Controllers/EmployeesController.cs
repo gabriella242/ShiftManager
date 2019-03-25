@@ -44,9 +44,31 @@ namespace ShiftManagerProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Employees employees)
         {
+            if (!(ModelState.IsValid))
+            {
+                return View(employees);
+            }
+
+            if (employees.FirstName.Any(char.IsDigit))
+            {
+                ModelState.AddModelError("FirstName", "Letters Only");
+                return View(employees);
+            }
+            else if(employees.LastName.Any(char.IsDigit))
+            {
+                ModelState.AddModelError("LastName", "Letters Only");
+                return View(employees);
+            }
+            else if(employees.ID < 0)
+            {
+                ModelState.AddModelError("ID", "Positive Numbers Only");
+                return View(employees);
+            }
+
             if(EmployRes.UserCounter(employees))
             {
-                throw new ArgumentException("User already exists");
+                ModelState.AddModelError("Email", "Employee already exist");
+                return View(employees);
             }
 
             if (ModelState.IsValid)
@@ -105,6 +127,8 @@ namespace ShiftManagerProject.Controllers
         public ActionResult DeleteConfirmed(long id)
         {
             Employees employees = db.Employees.Find(id);
+            ShiftPref shiftPref = db.ShiftPref.Where(x=>x.EmployID == id).FirstOrDefault(); //employee(many) -> shiftpref(one) relationship
+            db.Saturday.Remove(shiftPref);
             db.Employees.Remove(employees);
             db.SaveChanges();
             return RedirectToAction("Index");

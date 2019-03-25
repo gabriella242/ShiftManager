@@ -1,12 +1,13 @@
 ﻿@model IEnumerable<ShiftManagerProject.Models.PrevWeeks>
 
 @{
-    ViewBag.Title = "LastWeek";
+    ViewBag.Title = "FShiftsForEmployees";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    DateTime lastSunday = DateTime.Now;
-    while (lastSunday.DayOfWeek != DayOfWeek.Sunday)
-    { lastSunday = lastSunday.AddDays(-1); }
-    var lastSundays = Convert.ToDateTime(lastSunday).ToString("dd/MM/yyyy");
+
+    DateTime nextSunday = DateTime.Now.AddDays(1);
+    while (nextSunday.DayOfWeek != DayOfWeek.Sunday)
+    { nextSunday = nextSunday.AddDays(1); }
+    var NextWeek = Convert.ToDateTime(nextSunday).ToString("dd/MM/yyyy");
 
     int counter = 1;
 
@@ -15,14 +16,13 @@
 <link rel="stylesheet" type="text/css" href="~/Content/EmployViewSchedules.css" />
 @if (ViewBag.ShiftUpdate != 0)
 {
-    <h3 class="msg">No Shifts Available</h3>
+    <h3 class="msg">Shifts haven't been updated yet</h3>
 }
 else
 {
     <br /><br />
-    <h2>Your shifts for Week - @lastSundays</h2>
+    <h2>Next Week's Shifts - @NextWeek</h2>
     <br /><br />
-
     <div class='table-responsive'>
         <table id="tablePreview" class="table table-hover table-bordered table-condensed">
             <tr class="table-active tblheader">

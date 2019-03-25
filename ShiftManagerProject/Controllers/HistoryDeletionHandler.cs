@@ -15,9 +15,13 @@ namespace ShiftManagerProject.Controllers
         public void PrevWeeksDeletion()
         {
             var count = db.PrevWeeks.ToList();
+
             if (count.Count() > 476)
             {
-                foreach (var shift in db.PrevWeeks.Take(28))
+                var counter = count.OrderBy(s => s.Dates.Date).ThenBy(s => s.OfDayType).Where(c => c.Day == "Saturday").FirstOrDefault().Dates.Date;
+                counter = counter.AddDays(1);
+
+                foreach (var shift in db.PrevWeeks.Where(d=>d.Dates < counter).ToList())
                 {
                     db.PrevWeeks.Remove(shift);
                 }
@@ -34,10 +38,11 @@ namespace ShiftManagerProject.Controllers
 
         public void FshiftDeletion()
         {
+            var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
             var countF = db.FinalShift.ToList();
-            if (countF.Count() >= 56)
+            if (countF.Count() >= (totalshifts*2))
             {
-                foreach (var shift in db.FinalShift.Take(28))
+                foreach (var shift in db.FinalShift.Take(totalshifts))
                 {
                     db.FinalShift.Remove(shift);
                 }
@@ -54,10 +59,10 @@ namespace ShiftManagerProject.Controllers
 
         public void SpecialFixedFshiftDeletion()
         {
-
-            if (db.FinalShift.Count() >= 28)
+            var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
+            if (db.FinalShift.Count() >= totalshifts)
             {
-                var countF = db.FinalShift.Take(28).ToList();
+                var countF = db.FinalShift.Take(totalshifts).ToList();
 
                 foreach (var shift in countF)
                 {
@@ -89,5 +94,22 @@ namespace ShiftManagerProject.Controllers
         //        throw new ArgumentException("Unable to delete Preference History");
         //    }
         //}
+
+        public void RemakeDeletion()
+        {
+                var RemakeList = db.Remake.ToList();
+                foreach (var shift in RemakeList)
+                {
+                    db.Remake.Remove(shift);
+                }
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch
+                {
+                    throw new ArgumentException("Unable to delete Saved Shift History");
+                }
+        }
     }
 }

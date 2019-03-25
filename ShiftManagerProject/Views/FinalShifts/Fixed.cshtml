@@ -15,6 +15,7 @@
             Value = name.FirstName
         });
     }
+    var listoffixed = @ViewBag.FixedList;
 }
 <link rel="stylesheet" type="text/css" href="~/Content/FixedFinalShift.css" />
 @using (Html.BeginForm())
@@ -22,7 +23,6 @@
     @Html.AntiForgeryToken()
     <br /><br />
     <h2>Fixed Shifts</h2>
-    <br />
     <div class="form-horizontal">
         <div class="col">
             @Html.DisplayNameFor(model => model.Day)
@@ -61,13 +61,17 @@
             </div>
         </div>
     </div>
-    <br /><br />
-
-    @Html.ActionLink("Officially Close Week", "NewClose", "FinalShifts", new { @class = "btn btn-primary btn-sm btn btn-info", @id = "FixedShifts" })
     <br />
-}
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                @Html.ActionLink("Officially Close Week", "NewClose", "FinalShifts", new { @class = "btn btn-primary btn-sm btn btn-info" })
+            </div>
+            <div class="col-4">
+            </div>
+        </div>
+    </div>
+    <br /><br />
 }
 

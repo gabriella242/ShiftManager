@@ -1,7 +1,7 @@
 ﻿#RedoBTN {
     position: absolute;
-    right: 412px;
-    top: 275px;
+    right: 21%;
+    top: 31%;
 }
 
 table {
@@ -10,6 +10,37 @@ table {
 }
 
 .headertbl {
-    background-color: mediumpurple;
+    background-color: darkcyan;
     color: white;
+    font-weight:600;
 }
+
+#NoOfShifts {
+    position: absolute;
+    color:black;
+    font-weight:600;
+}
+
+.SavedSubmitBTN {
+    position: absolute;
+    top: 26%;
+    right: 21%;
+}
+
+.fontheader {
+    color: mediumpurple;
+    font-family: 'Coiny', cursive;
+}
+
+.title {
+    text-align: center;
+}
+
+label{
+    color:black;
+}
+
+.bold{
+    font-weight:600;
+}
+

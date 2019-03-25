@@ -16,3 +16,7 @@ table {
     background-color: mediumpurple;
     color: white;
 }
+
+.bold {
+    font-weight: 600;
+}

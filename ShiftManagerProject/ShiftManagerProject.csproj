@@ -56,6 +56,12 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.1\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="Json, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c6752e45808247c2, processorArchitecture=MSIL">
+      <HintPath>..\packages\JSON.1.0.1\lib\net40\Json.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.DependencyCollector, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
     </Reference>
@@ -86,12 +92,14 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net45\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -161,6 +169,7 @@
     <Compile Include="Controllers\HistoryDeletionHandler.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PrevWeeksController.cs" />
+    <Compile Include="Controllers\ScheduleParametersController.cs" />
     <Compile Include="Controllers\ShiftPrefsController.cs" />
     <Compile Include="DAL\ShiftManagerContext.cs" />
     <Compile Include="DAL\ShiftManagerInitializer.cs" />
@@ -271,9 +280,13 @@
     <Compile Include="Migrations\201901201234036_datetimecolumn.Designer.cs">
       <DependentUpon>201901201234036_datetimecolumn.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201902181042029_fixchanges.cs" />
-    <Compile Include="Migrations\201902181042029_fixchanges.Designer.cs">
-      <DependentUpon>201902181042029_fixchanges.cs</DependentUpon>
+    <Compile Include="Migrations\201902191721393_ScheduleParameters.cs" />
+    <Compile Include="Migrations\201902191721393_ScheduleParameters.Designer.cs">
+      <DependentUpon>201902191721393_ScheduleParameters.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902271137081_NewTBLs.cs" />
+    <Compile Include="Migrations\201902271137081_NewTBLs.Designer.cs">
+      <DependentUpon>201902271137081_NewTBLs.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ShiftManager.cs" />
@@ -289,6 +302,7 @@
     <Content Include="Content\FixedFinalShift.css" />
     <Content Include="Content\HomePage.css" />
     <Content Include="Content\EmployViewSchedules.css" />
+    <Content Include="Content\ScheduleParameters.css" />
     <Content Include="Content\ShiftPrefIndex.css" />
     <Content Include="Content\IndexPrev.css" />
     <Content Include="Content\IndexPrevPrint.css" />
@@ -366,7 +380,7 @@
     <Content Include="Views\Employees\Edit.cshtml" />
     <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\FinalShifts\Index.cshtml" />
-    <Content Include="Views\FinalShifts\FShiftsForEmployees.cshtml" />
+    <Content Include="Views\PrevWeeks\FShiftsForEmployees.cshtml" />
     <Content Include="Views\PrevWeeks\Delete.cshtml" />
     <Content Include="Views\PrevWeeks\Index.cshtml" />
     <Content Include="Views\PrevWeeks\LastWeek.cshtml" />
@@ -380,7 +394,14 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\FinalShifts\ViewAvailableEmployees.cshtml" />
+    <Content Include="Views\ScheduleParameters\DayCreate.cshtml" />
+    <Content Include="Views\ScheduleParameters\Delete.cshtml" />
+    <Content Include="Views\ScheduleParameters\EditWeek.cshtml" />
+    <Content Include="Views\ScheduleParameters\Index.cshtml" />
+    <Content Include="Views\ScheduleParameters\WeekCreate.cshtml" />
+    <Content Include="Views\ScheduleParameters\EditDay.cshtml" />
+    <Content Include="Views\FinalShifts\SavedSchedule.cshtml" />
+    <Content Include="Views\ScheduleParameters\EditMax.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -469,8 +490,11 @@
     <EmbeddedResource Include="Migrations\201901201234036_datetimecolumn.resx">
       <DependentUpon>201901201234036_datetimecolumn.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902181042029_fixchanges.resx">
-      <DependentUpon>201902181042029_fixchanges.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201902191721393_ScheduleParameters.resx">
+      <DependentUpon>201902191721393_ScheduleParameters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902271137081_NewTBLs.resx">
+      <DependentUpon>201902271137081_NewTBLs.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

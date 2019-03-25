@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using ShiftManagerProject.DAL;
 using ShiftManagerProject.Models;
 using System.Net.Mail;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace ShiftManagerProject.Controllers
 {
@@ -37,6 +39,20 @@ namespace ShiftManagerProject.Controllers
             {
                 Employees = db.Employees.ToList()
             };
+            var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
+            DateTime NextSunday = DateTime.Now.AddDays(1);
+            while (NextSunday.DayOfWeek != DayOfWeek.Sunday)
+            { NextSunday = NextSunday.AddDays(1); }
+
+            var listofFixed = new List<FinalShift>();
+            if ((db.FinalShift.Where(y => y.Dates > NextSunday.Date).Count() <= totalshifts / 2) && db.FinalShift.Count() > 0)
+            {
+                foreach (var shift in db.FinalShift.Where(y => y.Dates > NextSunday.Date).ToList())
+                {
+                    listofFixed.Add(shift);
+                }
+            }
+            ViewBag.FixedList = listofFixed;
             return View(finalShift);
         }
 
@@ -47,6 +63,7 @@ namespace ShiftManagerProject.Controllers
             bool flag = false;
             int i, y;
             Employees Emp = db.Employees.FirstOrDefault(x => x.FirstName == FixedShift.Name);
+            var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
             for (i = 1; FSrespo.DayOfWeek(i) != FixedShift.Day; i++) ;
             y = FixedShift.Morning == true ? 0 : FixedShift.Afternoon == true ? 2 : 3;
 
@@ -64,7 +81,7 @@ namespace ShiftManagerProject.Controllers
 
             FixedShift.Dates = FSrespo.NextWeeksDates(day);
 
-            if (db.FinalShift.Count() == 28 || db.FinalShift.Count() 
+            if (db.FinalShift.Count() == totalshifts || db.FinalShift.Count()
                 == 0) { FSrespo.OfDayHandler(true, 0, 0); }
 
             try
@@ -97,8 +114,8 @@ namespace ShiftManagerProject.Controllers
         public ActionResult Index()
         {
             int ad = 0;
-
-            var pweeks = db.PrevWeeks.OrderByDescending(x => x.ID).Take(28).OrderBy(w => w.OfDayType).Select(k => k.EmployID).ToList();
+            var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
+            var pweeks = db.PrevWeeks.OrderByDescending(x => x.ID).Take(totalshifts).OrderBy(w => w.OfDayType).Select(k => k.EmployID).ToList();
             var fweeks = db.FinalShift.OrderBy(q => q.OfDayType).Select(k => k.EmployID).ToList();
             if (pweeks.SequenceEqual(fweeks))
             {
@@ -106,14 +123,8 @@ namespace ShiftManagerProject.Controllers
             }
 
             ViewBag.admin = ad;
-            var nextshifts = db.FinalShift.OrderByDescending(x => x.OfDayType).OrderBy(x => x.OfDayType).ToList();
 
-            return View(nextshifts);
-        }
-
-        public ActionResult FShiftsForEmployees()
-        {
-            var nextshifts = db.FinalShift.OrderByDescending(x => x.OfDayType).OrderBy(x => x.OfDayType).ToList();
+            var nextshifts = db.FinalShift.OrderBy(x => x.OfDayType).ToList();
             return View(nextshifts);
         }
 
@@ -149,12 +160,14 @@ namespace ShiftManagerProject.Controllers
         {
             FSrespo.PrevShiftsRotation();
             HsDelete.PrevWeeksDeletion();
+            var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
 
             //DateTime nextSunday = DateTime.Now.AddDays(1);
             //while (nextSunday.DayOfWeek != DayOfWeek.Sunday)
             //{ nextSunday = nextSunday.AddDays(1); }
             //var NextWeek = Convert.ToDateTime(nextSunday).ToString("dd/MM/yyyy");
-            //var shifts = db.PrevWeeks.ToList().OrderByDescending(k => k.ID).Take(28).OrderBy(x => x.OfDayType);
+            //var shifts = db.PrevWeeks.ToList().OrderByDescending(k => k.ID).Take(totalshifts).OrderBy(x => x.OfDayType);
+            //var empList = new List<Employees>();
 
             //var smtp = new SmtpClient
             //{
@@ -163,10 +176,18 @@ namespace ShiftManagerProject.Controllers
             //    EnableSsl = true,
             //    DeliveryMethod = SmtpDeliveryMethod.Network,
             //    UseDefaultCredentials = false,
-            //    Credentials = new NetworkCredential()
+            //    Credentials = new NetworkCredential("","")
             //};
 
-            //foreach (var employee in db.Employees.ToList())
+            //foreach(var emp in db.Employees.ToList())
+            //{
+            //    if(shifts.Where(x=>x.EmployID == emp.ID).Any())
+            //    {
+            //        empList.Add(emp);
+            //    }
+            //}
+
+            //foreach (var employee in empList)
             //{
             //    MailMessage mailMessage = new MailMessage
             //    {
@@ -277,6 +298,42 @@ namespace ShiftManagerProject.Controllers
             return View(finalShift);
         }
 
+        public ActionResult SaveToRemake()
+        {
+            HsDelete.RemakeDeletion();
+            FSrespo.SaveToRemakeTBL();
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult SavedSchedule()
+        {
+            int ad = 0;
+            var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
+            var sweeks = db.Remake.Take(totalshifts).OrderBy(w => w.OfDayType).Select(k => k.EmployID).ToList();
+            var fweeks = db.FinalShift.OrderBy(q => q.OfDayType).Select(k => k.EmployID).ToList();
+            if (sweeks.SequenceEqual(fweeks))
+            {
+                ad = 1;
+            }
+
+            ViewBag.admin = ad;
+
+            ViewBag.msg = db.Remake.Select(g => g.OfDayType).Count() == totalshifts ? 1 : 0;
+            var nextshifts = db.Remake.OrderBy(x => x.OfDayType).ToList();
+            return View(nextshifts);
+        }
+
+        public ActionResult SaveTheSchedule(bool id)
+        {
+            if (id)
+            {
+                HsDelete.SpecialFixedFshiftDeletion();
+                FSrespo.SaveRemakeToFinalTBL();
+            }
+            return RedirectToAction("Index");
+        }
+
         public ActionResult Delete(long? id)
         {
             if (id == null)
@@ -300,6 +357,68 @@ namespace ShiftManagerProject.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
+        public FileContentResult Download()
+        {
+            var fileDownloadName = String.Format(DateTime.Now.ToString("dd/MM/yyyy") + " Shifts.xlsx");
+            const string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+            // Pass your ef data to method
+            ExcelPackage package = GenerateExcelFile(db.FinalShift.OrderBy(x => x.OfDayType).ToList());
+
+            var fsr = new FileContentResult(package.GetAsByteArray(), contentType)
+            {
+                FileDownloadName = fileDownloadName
+            };
+
+            return fsr;
+        }
+
+        private static ExcelPackage GenerateExcelFile(IEnumerable<FinalShift> datasource)
+        {
+
+            ExcelPackage pck = new ExcelPackage();
+
+            //Create the worksheet 
+            ExcelWorksheet ws = pck.Workbook.Worksheets.Add(DateTime.Now.ToString("dd/MM/yyyy"));
+
+            // Sets Headers
+            for (int i = 1, j = 1; i < 2; i++)
+            {
+                foreach (var item in datasource.ElementAt(i).GetType().GetProperties())
+                {
+                    if(item.Name == "ID" || item.Name == "EmployID" || item.Name == "Employees" || item.Name == "OfDayType")
+                    { continue; }
+                    ws.Cells[i, j++].Value = item.Name;
+                }
+            }
+
+            for (int i = 0, j = 1; i < datasource.Count(); i++, j= 1)
+            {
+                ws.Cells[i + 2, j++].Value = datasource.ElementAt(i).Name;
+                ws.Cells[i + 2, j++].Value = datasource.ElementAt(i).Day;
+                ws.Cells[i + 2, j++].Value = datasource.ElementAt(i).Morning;
+                ws.Cells[i + 2, j++].Value = datasource.ElementAt(i).Afternoon;
+                ws.Cells[i + 2, j++].Value = datasource.ElementAt(i).Night;
+                ws.Cells[i + 2, j++].Value = datasource.ElementAt(i).Dates.ToString("dd/MM/yyyy");
+            }
+
+            // Format Header of Table
+            using (ExcelRange rng = ws.Cells["A1:M1"])
+            {
+                rng.Style.Font.Bold = true;
+            }
+
+            using (ExcelRange rng = ws.Cells)
+            {
+                rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                rng.AutoFitColumns();
+            }
+
+            return pck;
+        }
+
 
         protected override void Dispose(bool disposing)
         {

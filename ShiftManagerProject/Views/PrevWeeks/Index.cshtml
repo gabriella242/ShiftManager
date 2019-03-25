@@ -13,31 +13,63 @@
             Value = name.FirstName
         });
     }
+    List<long> downloadlist = new List<long>();
+
 }
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
 <link rel="stylesheet" type="text/css" href="~/Content/IndexPrev.css" />
 <link rel="stylesheet" type="text/css" media="print" href="~/Content/IndexPrevPrint.css" />
+
 <br />
 <h2>Shift History</h2>
 <br /><br />
 
-<a id="position" class="btn btn-success btn-sm no-print" href="javascript:window.print()">Print</a>
+<div class="container no-print">
+    <div class="row">
+        <div class="col">
+        </div>
+        <div class="col-9">
+        </div>
+        <div class="col">
+            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                <button type="button" class="btn btn-success">Actions</button>
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="text-align:center;">
+                        <a class="dropdown-item" href="javascript:window.print()">Print</a>
+                        @Html.ActionLink("Download To Excel", "DownloadP", "PrevWeeks", new { @class = "dropdown-item" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     <div class="container-fluid bg-light no-print">
         <div class="row align-items-center justify-content-center">
-            <div class="col-md-2 pt-3">
-                <div class="form-group ">
-                    <select name="inputState" class="form-control">
-                        <option selected>Dates</option>
-                        <option>Month</option>
-                        <option>3 Months</option>
-                        <option>6 Months</option>
-                        <option>Year</option>
-                        <option>All</option>
-                    </select>
+            <div class="col-md-1 pt-3 centered">
+                <label>From</label>
+            </div>
+            <div class="col-md-3 pt-3">
+                <div class="form-group">
+                    <input type="date" class="form-control" name="From" />
+                </div>
+            </div>
+            <div class="col-md-1 pt-3 centered">
+                <label>To</label>
+            </div>
+            <div class="col-md-3 pt-3">
+                <div class="form-group">
+                    <input type="date" class="form-control" name="To" />
                 </div>
             </div>
             <div class="col-md-2 pt-3">
@@ -51,8 +83,9 @@
         </div>
     </div>
 }
-    <div class="table-responsive">
-        <table class="table table-hover table-bordered">
+
+    <div class="table-responsive form-group">
+        <table class="table table-hover table-bordered table-condensed">
             <tr class="tblheader">
                 <th class="headercolor">
                     @Html.DisplayNameFor(model => model.ID)
@@ -81,6 +114,7 @@
             {
                 <tr>
                     <td>
+                        @{ downloadlist.Add(item.ID);}
                         @Html.DisplayFor(modelItem => item.ID)
                     </td>
                     <td>
@@ -114,4 +148,32 @@
             }
         </table>
     </div>
+
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('.dropdown-toggle').dropdown()
+        @*$('a.submitForm').click(function () {
+
+            var array = @Html.Raw(Json.Encode(@ViewBag.List));
+       
+
+            $.ajax({
+                url: '@Url.Action("DownloadP", "PrevWeeks")',
+                type: "POST",
+                data: array,
+                dataType: "json",
+                cache: false,
+                traditional: true,
+                contentType: 'application/json; charset=utf-8',
+                success: function () {
+                    alert("heyy");
+                },
+                error: function () {
+                    alert("error");
+                }
+            })
+        })*@
+    });
+    </script>
 <br />

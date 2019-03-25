@@ -5,6 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <br /><br />
+      <style>
+          .bold {
+              font-weight: 600;
+          }
+      </style>
 <h4>Your Preferences</h4>
 <br />
 
@@ -42,7 +47,7 @@
         <div class="col-2">
             @Html.HiddenFor(model => model.EmployID, new { @Value = id })
             <div class="col-md-10">
-                @Html.ValidationMessageFor(model => model.EmployID, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.EmployID, "", new { @class = "text-danger bold" })
             </div>
         </div>
 
@@ -50,7 +55,7 @@
             @Html.LabelFor(model => model.NoOfShifts, htmlAttributes: new { @class = "control-label col-md-4" })
             <div class="col">
                 @Html.DropDownListFor(model => model.NoOfShifts, NoOfShifts, "-- Select NoOfShifts --")
-                @Html.ValidationMessageFor(model => model.NoOfShifts, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.NoOfShifts, "", new { @class = "text-danger bold" })
             </div>
         </div>
     </div>
@@ -63,7 +68,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Morning1)
-                    @Html.ValidationMessageFor(model => model.Morning1, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Morning1, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -72,7 +77,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Afternoon1)
-                    @Html.ValidationMessageFor(model => model.Afternoon1, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Afternoon1, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -82,7 +87,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Night1)
-                    @Html.ValidationMessageFor(model => model.Night1, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Night1, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -98,7 +103,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Morning2)
-                    @Html.ValidationMessageFor(model => model.Morning2, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Morning2, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -108,7 +113,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Afternoon2)
-                    @Html.ValidationMessageFor(model => model.Afternoon2, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Afternoon2, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -118,7 +123,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Night2)
-                    @Html.ValidationMessageFor(model => model.Night2, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Night2, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -134,7 +139,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Morning3)
-                    @Html.ValidationMessageFor(model => model.Morning3, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Morning3, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -144,7 +149,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Afternoon3)
-                    @Html.ValidationMessageFor(model => model.Afternoon3, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Afternoon3, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -154,7 +159,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Night3)
-                    @Html.ValidationMessageFor(model => model.Night3, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Night3, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -170,7 +175,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Morning4)
-                    @Html.ValidationMessageFor(model => model.Morning4, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Morning4, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -180,7 +185,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Afternoon4)
-                    @Html.ValidationMessageFor(model => model.Afternoon4, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Afternoon4, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -190,7 +195,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Night4)
-                    @Html.ValidationMessageFor(model => model.Night4, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Night4, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -206,7 +211,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Morning5)
-                    @Html.ValidationMessageFor(model => model.Morning5, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Morning5, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -216,7 +221,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Afternoon5)
-                    @Html.ValidationMessageFor(model => model.Afternoon5, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Afternoon5, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -226,7 +231,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Night5)
-                    @Html.ValidationMessageFor(model => model.Night5, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Night5, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -242,7 +247,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Morning6)
-                    @Html.ValidationMessageFor(model => model.Morning6, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Morning6, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -252,7 +257,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Afternoon6)
-                    @Html.ValidationMessageFor(model => model.Afternoon6, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Afternoon6, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -262,7 +267,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Night6)
-                    @Html.ValidationMessageFor(model => model.Night6, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Night6, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -278,7 +283,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Morning7)
-                    @Html.ValidationMessageFor(model => model.Morning7, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Morning7, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -287,7 +292,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Afternoon7)
-                    @Html.ValidationMessageFor(model => model.Afternoon7, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Afternoon7, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>
@@ -296,7 +301,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Night7)
-                    @Html.ValidationMessageFor(model => model.Night7, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Night7, "", new { @class = "text-danger bold" })
                 </div>
             </div>
         </div>

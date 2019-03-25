@@ -6,3 +6,8 @@
     text-indent: -9999px;
     direction: ltr;
 }
+
+.namestyle {
+    font-family: 'Kalam', cursive;
+    color: mediumpurple;
+}

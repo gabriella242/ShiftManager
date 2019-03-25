@@ -20,16 +20,22 @@
 <br />
 <h2>Your Preferences</h2>
 <br />
-@*<p>
-        @Html.ActionLink("Delete & Create New", "Delete", new { Id = ID })
-</p>*@
-
-<p>
-    @Html.ActionLink("Edit", "Edit", new { Id = ID }, new { @class = "btn btn-success" })
-</p>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { Id = ID }, new { @class = "btn btn-success" })
+            </p>
+        </div>
+        <div class="col-9">
+        </div>
+        <div class="col">
+        </div>
+    </div>
+</div>
 <br />
 <div class='table-responsive'>
-    <table id="tablePreview" class="table table-hover table-bordered">
+    <table id="tablePreview" class="table table-hover table-bordered table-condensed">
         <tr class="table-active tblheader">
             <th>
             </th>

@@ -1,31 +1,28 @@
-﻿@model IEnumerable<ShiftManagerProject.Models.PrevWeeks>
+﻿@model IEnumerable<ShiftManagerProject.Models.Remake>
+
 
 @{
-    ViewBag.Title = "LastWeek";
+    ViewBag.Title = "SavedSchedule";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    DateTime lastSunday = DateTime.Now;
-    while (lastSunday.DayOfWeek != DayOfWeek.Sunday)
-    { lastSunday = lastSunday.AddDays(-1); }
-    var lastSundays = Convert.ToDateTime(lastSunday).ToString("dd/MM/yyyy");
-
     int counter = 1;
 
     List<string> WeekDay = new List<string>(new string[] { "", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" });
 }
-<link rel="stylesheet" type="text/css" href="~/Content/EmployViewSchedules.css" />
-@if (ViewBag.ShiftUpdate != 0)
+
+<h2 class="title">Saved Schedule</h2>
+
+<link rel="stylesheet" type="text/css" href="~/Content/FinalShiftIndex.css" />
+<br /><br />
+
+@if (@ViewBag.msg == 0)
 {
-    <h3 class="msg">No Shifts Available</h3>
+    <h3 class="fontheader title">Saved schedule doesn't match the parameter format</h3>
 }
 else
 {
-    <br /><br />
-    <h2>Your shifts for Week - @lastSundays</h2>
-    <br /><br />
-
     <div class='table-responsive'>
         <table id="tablePreview" class="table table-hover table-bordered table-condensed">
-            <tr class="table-active tblheader">
+            <tr class="table-active">
                 <th>
                 </th>
                 @foreach (var item in Model.Select(x => x.Day).Distinct())
@@ -117,9 +114,25 @@ else
                 }
             </tr>
         </table>
+        <br />
     </div>
 }
+@if (@ViewBag.admin != 0)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col-9">
+            </div>
+            <div class="col">
+                <h3 class="fontheader">Submitted!</h3>
+            </div>
+        </div>
+    </div>
+}
+else if (ViewBag.msg != 0)
+{
+    @Html.ActionLink("Submit", "SaveTheSchedule", "FinalShifts", new { id = true }, new { @class = "btn btn-success SavedSubmitBTN" })
+}
 <br /><br />
-
-
-
