@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" type="text/css" href="~/Content/EmployeeIndex.css" />
-<h2>Index</h2>
+<h2>Employees</h2>
 <br />
 <div class="container">
     <div class="row">
@@ -38,6 +38,9 @@
                             @Html.DisplayNameFor(model => model.Pass)
                         </th>
                         <th>
+                            @Html.DisplayNameFor(model => model.NoOfShifts)
+                        </th>
+                        <th>
                             @Html.DisplayNameFor(model => model.Admin)
                         </th>
                         <th></th>
@@ -45,33 +48,36 @@
 
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ID)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FirstName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LastName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Email)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Pass)
-                            </td>
-                            <td>
-                                @if (item.Admin == true)
-                                {
-                                    <i class="fas fa-check"></i>
-                                }
-                            </td>
-                            <td>
-                                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Pass)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NoOfShifts)
+                        </td>
+                        <td>
+                            @if (item.Admin == true)
+                            {
+                                <i class="fas fa-check"></i>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                        </td>
+                    </tr>
                     }
 
                 </table>

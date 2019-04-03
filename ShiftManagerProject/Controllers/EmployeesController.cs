@@ -70,6 +70,11 @@ namespace ShiftManagerProject.Controllers
                 ModelState.AddModelError("Email", "Employee already exist");
                 return View(employees);
             }
+            if(employees.NoOfShifts < 0)
+            {
+                ModelState.AddModelError("NoOfShifts", "Positive Numbers Only");
+                return View(employees);
+            }
 
             if (ModelState.IsValid)
             {
@@ -128,7 +133,8 @@ namespace ShiftManagerProject.Controllers
         {
             Employees employees = db.Employees.Find(id);
             ShiftPref shiftPref = db.ShiftPref.Where(x=>x.EmployID == id).FirstOrDefault(); //employee(many) -> shiftpref(one) relationship
-            db.Saturday.Remove(shiftPref);
+            db.Preferences.Remove(shiftPref);
+            db.SaveChanges();
             db.Employees.Remove(employees);
             db.SaveChanges();
             return RedirectToAction("Index");

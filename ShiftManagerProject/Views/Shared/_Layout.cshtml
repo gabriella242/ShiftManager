@@ -61,16 +61,16 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: black;display: inline;">History</a>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position:absolute; will-change: transform;">
-                                    @Html.ActionLink("Shift History", "Index", "PrevWeeks", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Shift History", "Index", "History", null, new { @class = "dropdown-item" })
                                     <div class="dropdown-divider"></div>
-                                    @Html.ActionLink("This Week's Schedule", "LastWeek", "PrevWeeks", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("This Week's Schedule", "LastWeek", "History", null, new { @class = "dropdown-item" })
                                 </div>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                @Html.ActionLink("This Week's Schedule", "LastWeek", "PrevWeeks")
+                                @Html.ActionLink("This Week's Schedule", "LastWeek", "History")
                             </li>
                         }
                     }
@@ -84,7 +84,7 @@
                             }
                             else
                             {
-                                @Html.ActionLink("Next Week's Schedule", "FShiftsForEmployees", "PrevWeeks")
+                                @Html.ActionLink("Next Week's Schedule", "FShiftsForEmployees", "History")
                             }
                         }
                     </li>

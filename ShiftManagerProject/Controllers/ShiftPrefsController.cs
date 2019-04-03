@@ -69,7 +69,7 @@ namespace ShiftManagerProject.Controllers
 
             if (ModelState.IsValid)
             {
-                db.Saturday.Add(shiftPref);
+                db.Preferences.Add(shiftPref);
                 db.SaveChanges();
                 return RedirectToAction("Index", new { Id = shiftPref.EmployID});
             }
@@ -137,7 +137,7 @@ namespace ShiftManagerProject.Controllers
         public ActionResult DeleteConfirmed(long id)
         {
             ShiftPref shiftPref = db.ShiftPref.Find(id);
-            db.Saturday.Remove(shiftPref);
+            db.Preferences.Remove(shiftPref);
             db.SaveChanges();
             return RedirectToAction("Index", new { ID = shiftPref.EmployID });
         }

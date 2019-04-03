@@ -18,22 +18,22 @@ using ShiftManagerProject.Models;
 
 namespace ShiftManagerProject.Controllers
 {
-    public class PrevWeeksController : Controller
+    public class HistoryController : Controller
     {
         private ShiftManagerContext db = new ShiftManagerContext();
         private HistoryDeletionHandler HsDelete = new HistoryDeletionHandler();
-        private static List<PrevWeeks> ListForDownload = new List<PrevWeeks>();
+        private static List<History> ListForDownload = new List<History>();
 
         public ActionResult Index()
         {
-            var Pcount = db.PrevWeeks.ToList();
+            var Pcount = db.History.ToList();
             if (Pcount.Count()> 476)
             {
-                HsDelete.PrevWeeksDeletion();
+                HsDelete.HistoryDeletion();
             }
 
-            var nextshifts = db.PrevWeeks.OrderBy(r => DbFunctions.TruncateTime(r.Dates)).ThenBy(c => c.OfDayType).ToList();
-            ViewBag.Employees = db.Employees.ToList();
+            var nextshifts = db.History.OrderBy(r => DbFunctions.TruncateTime(r.Dates)).ThenBy(c => c.OfDayType).ToList();
+            ViewBag.Employees = db.Employees.Where(x => x.Admin == false).ToList();
             ListForDownload = nextshifts;
             return View(nextshifts);
         }
@@ -45,7 +45,7 @@ namespace ShiftManagerProject.Controllers
             string Ename = form["Employees"].ToString();
             bool FromDateBool = DateTime.TryParse(form["From"].ToString(), out DateTime FromDate);
             bool ToDateBool = DateTime.TryParse(form["To"].ToString(), out DateTime ToDate);
-            var ReportShifts = db.PrevWeeks.OrderBy(r => DbFunctions.TruncateTime(r.Dates)).ThenBy(c => c.OfDayType).ToList();
+            var ReportShifts = db.History.OrderBy(r => DbFunctions.TruncateTime(r.Dates)).ThenBy(c => c.OfDayType).ToList();
 
             if (FromDateBool && ToDateBool)
             {
@@ -64,7 +64,7 @@ namespace ShiftManagerProject.Controllers
 
         public ActionResult LastWeek()
         {          
-            HsDelete.PrevWeeksDeletion();
+            HsDelete.HistoryDeletion();
             HsDelete.FshiftDeletion();
 
             var context = ((IObjectContextAdapter)db).ObjectContext;
@@ -73,7 +73,7 @@ namespace ShiftManagerProject.Controllers
 
             int i = 0;
         
-            var nextshifts = db.PrevWeeks.ToList();
+            var nextshifts = db.History.ToList();
 
             if (!(nextshifts.Where(y=>y.Dates.Date == DateTime.Now.Date).Any()))
             {
@@ -97,7 +97,7 @@ namespace ShiftManagerProject.Controllers
         public ActionResult FShiftsForEmployees()
         {
             int i = 0;
-            var nextshifts = db.PrevWeeks.ToList();
+            var nextshifts = db.History.ToList();
             DateTime NextSunday = DateTime.Now.AddDays(1);
             while (NextSunday.DayOfWeek != DayOfWeek.Sunday)
             { NextSunday = NextSunday.AddDays(1); }
@@ -118,7 +118,7 @@ namespace ShiftManagerProject.Controllers
 
         public ActionResult DeleteConfirmed()
         {
-            HsDelete.PrevWeeksDeletion();
+            HsDelete.HistoryDeletion();
             HsDelete.FshiftDeletion();
             return RedirectToAction("Index");
         }
@@ -138,7 +138,7 @@ namespace ShiftManagerProject.Controllers
             return fsr;
         }
 
-        private static ExcelPackage GenerateExcelFile(IEnumerable<PrevWeeks> datasource)
+        private static ExcelPackage GenerateExcelFile(IEnumerable<History> datasource)
         {
 
             ExcelPackage pck = new ExcelPackage();

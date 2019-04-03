@@ -14,26 +14,6 @@
 <br />
 
 @{
-    List<SelectListItem> NoOfShifts = new List<SelectListItem>();
-
-    NoOfShifts.Add(new SelectListItem
-    {
-        Text = "3",
-        Value = "3"
-
-    });
-    NoOfShifts.Add(new SelectListItem
-    {
-        Text = "4",
-        Value = "4"
-    });
-    NoOfShifts.Add(new SelectListItem
-    {
-        Text = "5",
-        Value = "5"
-    });
-}
-@{
     var id = Request.Url.Segments.Last();
 }
 
@@ -48,14 +28,6 @@
             @Html.HiddenFor(model => model.EmployID, new { @Value = id })
             <div class="col-md-10">
                 @Html.ValidationMessageFor(model => model.EmployID, "", new { @class = "text-danger bold" })
-            </div>
-        </div>
-
-        <div class="col-6" style="text-align:center">
-            @Html.LabelFor(model => model.NoOfShifts, htmlAttributes: new { @class = "control-label col-md-4" })
-            <div class="col">
-                @Html.DropDownListFor(model => model.NoOfShifts, NoOfShifts, "-- Select NoOfShifts --")
-                @Html.ValidationMessageFor(model => model.NoOfShifts, "", new { @class = "text-danger bold" })
             </div>
         </div>
     </div>

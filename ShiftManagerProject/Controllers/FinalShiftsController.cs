@@ -37,7 +37,7 @@ namespace ShiftManagerProject.Controllers
             HsDelete.FshiftDeletion();
             FinalShift finalShift = new FinalShift
             {
-                Employees = db.Employees.ToList()
+                Employees = db.Employees.Where(x => x.Admin == false).ToList()
             };
             var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
             DateTime NextSunday = DateTime.Now.AddDays(1);
@@ -81,8 +81,7 @@ namespace ShiftManagerProject.Controllers
 
             FixedShift.Dates = FSrespo.NextWeeksDates(day);
 
-            if (db.FinalShift.Count() == totalshifts || db.FinalShift.Count()
-                == 0) { FSrespo.OfDayHandler(true, 0, 0); }
+            if (db.FinalShift.Count() <= totalshifts) { FSrespo.OfDayHandler(true, 0, 0); }
 
             try
             {
@@ -108,6 +107,7 @@ namespace ShiftManagerProject.Controllers
                 FixedShift.Employees = db.Employees.ToList();
                 return View(FixedShift);
             }
+
             return View(FixedShift);
         }
 
@@ -115,7 +115,7 @@ namespace ShiftManagerProject.Controllers
         {
             int ad = 0;
             var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
-            var pweeks = db.PrevWeeks.OrderByDescending(x => x.ID).Take(totalshifts).OrderBy(w => w.OfDayType).Select(k => k.EmployID).ToList();
+            var pweeks = db.History.OrderByDescending(x => x.ID).Take(totalshifts).OrderBy(w => w.OfDayType).Select(k => k.EmployID).ToList();
             var fweeks = db.FinalShift.OrderBy(q => q.OfDayType).Select(k => k.EmployID).ToList();
             if (pweeks.SequenceEqual(fweeks))
             {
@@ -130,7 +130,7 @@ namespace ShiftManagerProject.Controllers
 
         public ActionResult NewClose()
         {
-            HsDelete.PrevWeeksDeletion();
+            HsDelete.HistoryDeletion();
             HsDelete.SpecialFixedFshiftDeletion();
 
             FSrespo.LeastShiftPref();
@@ -159,7 +159,7 @@ namespace ShiftManagerProject.Controllers
         public ActionResult Send()
         {
             FSrespo.PrevShiftsRotation();
-            HsDelete.PrevWeeksDeletion();
+            HsDelete.HistoryDeletion();
             var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
 
             //DateTime nextSunday = DateTime.Now.AddDays(1);
@@ -176,7 +176,7 @@ namespace ShiftManagerProject.Controllers
             //    EnableSsl = true,
             //    DeliveryMethod = SmtpDeliveryMethod.Network,
             //    UseDefaultCredentials = false,
-            //    Credentials = new NetworkCredential("","")
+            //    Credentials = new NetworkCredential("", "")
             //};
 
             //foreach(var emp in db.Employees.ToList())
@@ -300,8 +300,8 @@ namespace ShiftManagerProject.Controllers
 
         public ActionResult SaveToRemake()
         {
-            HsDelete.RemakeDeletion();
-            FSrespo.SaveToRemakeTBL();
+            HsDelete.SavedScheduleDeletion();
+            FSrespo.SaveToSavedScheduleTBL();
             return RedirectToAction("Index");
         }
 
@@ -310,7 +310,7 @@ namespace ShiftManagerProject.Controllers
         {
             int ad = 0;
             var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
-            var sweeks = db.Remake.Take(totalshifts).OrderBy(w => w.OfDayType).Select(k => k.EmployID).ToList();
+            var sweeks = db.SavedSchedule.Take(totalshifts).OrderBy(w => w.OfDayType).Select(k => k.EmployID).ToList();
             var fweeks = db.FinalShift.OrderBy(q => q.OfDayType).Select(k => k.EmployID).ToList();
             if (sweeks.SequenceEqual(fweeks))
             {
@@ -319,8 +319,8 @@ namespace ShiftManagerProject.Controllers
 
             ViewBag.admin = ad;
 
-            ViewBag.msg = db.Remake.Select(g => g.OfDayType).Count() == totalshifts ? 1 : 0;
-            var nextshifts = db.Remake.OrderBy(x => x.OfDayType).ToList();
+            ViewBag.msg = db.SavedSchedule.Select(g => g.OfDayType).Count() == totalshifts ? 1 : 0;
+            var nextshifts = db.SavedSchedule.OrderBy(x => x.OfDayType).ToList();
             return View(nextshifts);
         }
 
@@ -355,7 +355,7 @@ namespace ShiftManagerProject.Controllers
             FinalShift finalShift = db.FinalShift.Find(id);
             db.FinalShift.Remove(finalShift);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Fixed");
         }
 
 

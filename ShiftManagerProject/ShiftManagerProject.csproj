@@ -168,7 +168,7 @@
     <Compile Include="Controllers\FshiftRepository.cs" />
     <Compile Include="Controllers\HistoryDeletionHandler.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\PrevWeeksController.cs" />
+    <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\ScheduleParametersController.cs" />
     <Compile Include="Controllers\ShiftPrefsController.cs" />
     <Compile Include="DAL\ShiftManagerContext.cs" />
@@ -288,6 +288,22 @@
     <Compile Include="Migrations\201902271137081_NewTBLs.Designer.cs">
       <DependentUpon>201902271137081_NewTBLs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904021129474_newchnges.cs" />
+    <Compile Include="Migrations\201904021129474_newchnges.Designer.cs">
+      <DependentUpon>201904021129474_newchnges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904030543450_NoOfShifts.cs" />
+    <Compile Include="Migrations\201904030543450_NoOfShifts.Designer.cs">
+      <DependentUpon>201904030543450_NoOfShifts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904030612523_DBnameChanges.cs" />
+    <Compile Include="Migrations\201904030612523_DBnameChanges.Designer.cs">
+      <DependentUpon>201904030612523_DBnameChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904030637331_DBnameChange.cs" />
+    <Compile Include="Migrations\201904030637331_DBnameChange.Designer.cs">
+      <DependentUpon>201904030637331_DBnameChange.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ShiftManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -380,10 +396,10 @@
     <Content Include="Views\Employees\Edit.cshtml" />
     <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\FinalShifts\Index.cshtml" />
-    <Content Include="Views\PrevWeeks\FShiftsForEmployees.cshtml" />
-    <Content Include="Views\PrevWeeks\Delete.cshtml" />
-    <Content Include="Views\PrevWeeks\Index.cshtml" />
-    <Content Include="Views\PrevWeeks\LastWeek.cshtml" />
+    <Content Include="Views\History\FShiftsForEmployees.cshtml" />
+    <Content Include="Views\History\Delete.cshtml" />
+    <Content Include="Views\History\Index.cshtml" />
+    <Content Include="Views\History\LastWeek.cshtml" />
     <Content Include="Views\FinalShifts\Fixed.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
@@ -495,6 +511,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902271137081_NewTBLs.resx">
       <DependentUpon>201902271137081_NewTBLs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904021129474_newchnges.resx">
+      <DependentUpon>201904021129474_newchnges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904030543450_NoOfShifts.resx">
+      <DependentUpon>201904030543450_NoOfShifts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904030612523_DBnameChanges.resx">
+      <DependentUpon>201904030612523_DBnameChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904030637331_DBnameChange.resx">
+      <DependentUpon>201904030637331_DBnameChange.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

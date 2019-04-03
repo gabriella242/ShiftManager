@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShiftManagerProject.Models.Remake>
+﻿@model IEnumerable<ShiftManagerProject.Models.SavedSchedule>
 
 
 @{
@@ -40,20 +40,20 @@ else
 
                 @foreach (var day in Model.Select(x => x.Day).Distinct())
                 {
-                    <td class="tbl">
-                        @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Morning == true).OrderBy(m => m.OfDayType).ToList())
+                <td class="tbl">
+                    @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Morning == true).OrderBy(m => m.OfDayType).ToList())
+                    {
+                        if (Mshift.Name.IsEmpty())
                         {
-                            if (Mshift.Name.IsEmpty())
-                            {
-                                @Html.ActionLink("Update", "Edit", new { id = Mshift.ID }, new { @class = "badge badge-danger" })
-                            }
-                            else
-                            {
-                                @Html.ActionLink(Mshift.Name, "Edit", new { id = Mshift.ID }, new { @class = Mshift.Name })
-                            }
-                            <br />
+                            @Html.Label(" ")
                         }
-                    </td>
+                        else
+                        {
+                            @Html.Label(Mshift.Name)
+                        }
+                        <br />
+                    }
+                </td>
                     counter++;
                 }
             </tr>
@@ -68,20 +68,20 @@ else
 
                 @foreach (var day in Model.Select(x => x.Day).Distinct())
                 {
-                    <td class="tbl">
-                        @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Afternoon == true).OrderBy(m => m.OfDayType).ToList())
+                <td class="tbl">
+                    @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Afternoon == true).OrderBy(m => m.OfDayType).ToList())
+                    {
+                        if (Mshift.Name.IsEmpty())
                         {
-                            if (Mshift.Name.IsEmpty())
-                            {
-                                @Html.ActionLink("Update", "Edit", new { id = Mshift.ID }, new { @class = "badge badge-danger" })
-                            }
-                            else
-                            {
-                                @Html.ActionLink(Mshift.Name, "Edit", new { id = Mshift.ID }, new { @class = Mshift.Name })
-                            }
-                            <br />
+                            @Html.Label(" ")
                         }
-                    </td>
+                        else
+                        {
+                            @Html.Label(Mshift.Name)
+                        }
+                        <br />
+                    }
+                </td>
                     counter++;
                 }
             </tr>
@@ -96,22 +96,22 @@ else
 
                 @foreach (var day in Model.Select(x => x.Day).Distinct())
                 {
-                    <td class="tbl">
-                        @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Night == true).OrderBy(m => m.OfDayType).ToList())
+                <td class="tbl">
+                    @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Night == true).OrderBy(m => m.OfDayType).ToList())
+                    {
+                        if (Mshift.Name.IsEmpty())
                         {
-                            if (Mshift.Name.IsEmpty())
-                            {
-                                @Html.ActionLink("Update", "Edit", new { id = Mshift.ID }, new { @class = "badge badge-danger" })
-                            }
-                            else
-                            {
-                                @Html.ActionLink(Mshift.Name, "Edit", new { id = Mshift.ID }, new { @class = Mshift.Name })
-                            }
-                            <br />
+                            @Html.Label(" ")
                         }
-                    </td>
-                    counter++;
-                }
+                        else
+                        {
+                            @Html.Label(Mshift.Name)
+                        }
+                        <br />
+                    }
+                </td>
+                        counter++;
+                    }
             </tr>
         </table>
         <br />

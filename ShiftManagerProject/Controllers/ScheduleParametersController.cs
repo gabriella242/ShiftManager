@@ -41,11 +41,20 @@ namespace ShiftManagerProject.Controllers
         }
 
 
-        public ActionResult DayCreate(bool? whattodo)
+        public ActionResult DayCreate(bool? whattodo, bool? require)
         {
+            if(require == true)
+            {
+                ModelState.AddModelError("Day", "Day is Required");
+                return View();
+            }
             if(whattodo == true)
             {
                 ModelState.AddModelError("Day", "Up to 7 days are allowed to be added!");
+            }
+            else if(whattodo == false)
+            {
+                ModelState.AddModelError("DMorning", "Positive Numbers only");
             }
             return View();
         }
@@ -61,12 +70,21 @@ namespace ShiftManagerProject.Controllers
         {
             int TotalShifts = 0;
             int idnum = 0;
-            HsDelete.SpecialFixedFshiftDeletion();
+            if (Convert.ToInt32(scheduleParameters.DMorning) < 0 || Convert.ToInt32(scheduleParameters.DAfternoon) < 0 || Convert.ToInt32(scheduleParameters.DNight) < 0)
+            {
+                return RedirectToAction("DayCreate", new { whattodo = false });
+            }
+            
             if (scheduleParameters.Day != null && db.ScheduleParameters.Select(o => o.Day != null).Count() > 7)
             {
                 return RedirectToAction("DayCreate", new { whattodo = true });
             }
-
+            if(scheduleParameters.Day == null & (Convert.ToInt32(scheduleParameters.DMorning) != 0 || Convert.ToInt32(scheduleParameters.DAfternoon) != 0 || Convert.ToInt32(scheduleParameters.DNight) != 0))
+            {
+                return RedirectToAction("DayCreate", new { whattodo = true, require = true });
+            }
+           
+            HsDelete.SpecialFixedFshiftDeletion();
             if (db.ShiftsPerWeek.Any())
             {
                 idnum = db.ShiftsPerWeek.FirstOrDefault().ID;
@@ -93,9 +111,13 @@ namespace ShiftManagerProject.Controllers
             }
             else
             {
-                TotalShifts += scheduleParameters.DMorning;
-                TotalShifts += scheduleParameters.DAfternoon;
-                TotalShifts += scheduleParameters.DNight;
+                scheduleParameters.DMorning = scheduleParameters.DMorning == null ? 0 : scheduleParameters.DMorning;
+                scheduleParameters.DAfternoon = scheduleParameters.DAfternoon == null ? 0 : scheduleParameters.DAfternoon;
+                scheduleParameters.DNight = scheduleParameters.DNight == null ? 0 : scheduleParameters.DNight;
+
+                TotalShifts += Convert.ToInt32(scheduleParameters.DMorning);
+                TotalShifts += Convert.ToInt32(scheduleParameters.DAfternoon);
+                TotalShifts += Convert.ToInt32(scheduleParameters.DNight);
 
                 TotalShifts += db.ShiftsPerWeek.Select(y => y.NumOfShifts).FirstOrDefault();
                 ShiftsPerWeek SperW = db.ShiftsPerWeek.Find(idnum);
@@ -270,7 +292,7 @@ namespace ShiftManagerProject.Controllers
                 if (scheduleParameters.DMorning != 0)
                 {
                     ShiftsPerWeek SperW = db.ShiftsPerWeek.FirstOrDefault();
-                    SperW.NumOfShifts += scheduleParameters.DMorning;
+                    SperW.NumOfShifts += Convert.ToInt32(scheduleParameters.DMorning);
                     db.Entry(SperW).State = EntityState.Modified;
                     db.SaveChanges();
                 }
@@ -278,7 +300,7 @@ namespace ShiftManagerProject.Controllers
                 if (scheduleParameters.DAfternoon != 0)
                 {
                     ShiftsPerWeek SperW = db.ShiftsPerWeek.FirstOrDefault();
-                    SperW.NumOfShifts += scheduleParameters.DAfternoon;
+                    SperW.NumOfShifts += Convert.ToInt32(scheduleParameters.DAfternoon);
 
                     db.Entry(SperW).State = EntityState.Modified;
                     db.SaveChanges();
@@ -287,7 +309,7 @@ namespace ShiftManagerProject.Controllers
                 if (scheduleParameters.DNight != 0)
                 {
                     ShiftsPerWeek SperW = db.ShiftsPerWeek.FirstOrDefault();
-                    SperW.NumOfShifts += scheduleParameters.DNight;
+                    SperW.NumOfShifts += Convert.ToInt32(scheduleParameters.DNight);
 
                     db.Entry(SperW).State = EntityState.Modified;
                     db.SaveChanges();
@@ -337,9 +359,9 @@ namespace ShiftManagerProject.Controllers
             }
             else
             {
-                SperW.NumOfShifts -= scheduleParameters.DMorning;
-                SperW.NumOfShifts -= scheduleParameters.DAfternoon;
-                SperW.NumOfShifts -= scheduleParameters.DNight;
+                SperW.NumOfShifts -= Convert.ToInt32(scheduleParameters.DMorning);
+                SperW.NumOfShifts -= Convert.ToInt32(scheduleParameters.DAfternoon);
+                SperW.NumOfShifts -= Convert.ToInt32(scheduleParameters.DNight);
 
                 db.Entry(SperW).State = EntityState.Modified;
                 db.SaveChanges();

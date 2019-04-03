@@ -35,6 +35,10 @@ namespace ShiftManagerProject.Models
         [Required(ErrorMessage = "Password Required")]
         public string Pass { get; set; }
 
+        [Required(ErrorMessage = "Required")]
+        [DisplayName("Number of Shifts")]
+        public int NoOfShifts { get; set; }
+
         [DisplayName("Admin Permissions")]
         [Required(ErrorMessage = "Admin Permissions Required")]
         public Nullable<bool> Admin { get; set; }
@@ -101,7 +105,7 @@ namespace ShiftManagerProject.Models
         [DisplayName("Night")]
         public Nullable<bool> Night5 { get; set; }
     }
-    public class Friday : Saturday
+    public class Friday : Preferences
     {
         [Required(ErrorMessage = "Required")]
         [DisplayName("Morning")]
@@ -113,7 +117,7 @@ namespace ShiftManagerProject.Models
         [DisplayName("Night")]
         public Nullable<bool> Night6 { get; set; }
     }
-    public class Saturday
+    public class Preferences
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -138,11 +142,6 @@ namespace ShiftManagerProject.Models
         public string Name { get; set; }
 
         public string Message { get; set; }
-
-        [Required(ErrorMessage = "Required")]
-        [DisplayName("Number of Shifts")]
-        public int NoOfShifts { get; set; }
-
     }
 
     public class FinalShift 
@@ -169,13 +168,14 @@ namespace ShiftManagerProject.Models
 
         public int OfDayType { get; set; }
 
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         [Required]
         public DateTime Dates { get; set; }
 
         public IEnumerable<Employees> Employees { get; set; }
     }
 
-    public class PrevWeeks
+    public class History
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
@@ -225,13 +225,13 @@ namespace ShiftManagerProject.Models
         public string Day { get; set; }
 
         [DisplayName("Morning")]
-        public int DMorning { get; set; }
+        public Nullable<int> DMorning { get; set; }
 
         [DisplayName("Afternoon")]
-        public int DAfternoon { get; set; }
+        public Nullable<int> DAfternoon { get; set; }
 
         [DisplayName("Night")]
-        public int DNight { get; set; }
+        public Nullable<int> DNight { get; set; }
 
         [DisplayName("Max Morning Shifts")]
         public int MaxMorning { get; set; }
@@ -253,7 +253,7 @@ namespace ShiftManagerProject.Models
         public int NumOfShifts { get; set; }
     }
 
-    public class Remake
+    public class SavedSchedule
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]

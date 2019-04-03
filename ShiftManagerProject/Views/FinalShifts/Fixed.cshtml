@@ -15,6 +15,7 @@
             Value = name.FirstName
         });
     }
+
     var listoffixed = @ViewBag.FixedList;
 }
 <link rel="stylesheet" type="text/css" href="~/Content/FixedFinalShift.css" />
@@ -24,36 +25,102 @@
     <br /><br />
     <h2>Fixed Shifts</h2>
     <div class="form-horizontal">
-        <div class="col">
-            @Html.DisplayNameFor(model => model.Day)
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Day, new SelectList(DayOfWeek.ToList()), "-- Select Day --", htmlAttributes: new { @class = "control-label col-md-2 dropdownboxes" })
-                @Html.ValidationMessageFor(model => model.Day, "", new { @class = "text-danger" })
-            </div><br />
-            @Html.DisplayNameFor(model => model.Employees)
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Name, Employees, "Select Employee", htmlAttributes: new { @class = "control-label col-md-2 dropdownboxes" })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div><br /><br />
-            <div class="col-md-10">
-                @Html.DisplayNameFor(model => model.Morning)
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Morning)
-                    @Html.ValidationMessageFor(model => model.Morning, "", new { @class = "text-danger" })
-                </div><br /><br />
-                @Html.DisplayNameFor(model => model.Afternoon)
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Afternoon)
-                    @Html.ValidationMessageFor(model => model.Afternoon, "", new { @class = "text-danger" })
-                </div><br /><br />
-                @Html.DisplayNameFor(model => model.Night)
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Night)
-                    @Html.ValidationMessageFor(model => model.Night, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col">
+                @Html.DisplayNameFor(model => model.Day)
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Day, new SelectList(DayOfWeek.ToList()), "-- Select Day --", htmlAttributes: new { @class = "control-label col-md-2 dropdownboxes" })
+                    @Html.ValidationMessageFor(model => model.Day, "", new { @class = "text-danger" })
                 </div><br />
+                @Html.DisplayNameFor(model => model.Employees)
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Name, Employees, "--Select Employee--", htmlAttributes: new { @class = "control-label col-md-2 dropdownboxes" })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div><br /><br />
+                <div class="col-md-10">
+                    @Html.DisplayNameFor(model => model.Morning)
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.Morning)
+                        @Html.ValidationMessageFor(model => model.Morning, "", new { @class = "text-danger" })
+                    </div><br /><br />
+                    @Html.DisplayNameFor(model => model.Afternoon)
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.Afternoon)
+                        @Html.ValidationMessageFor(model => model.Afternoon, "", new { @class = "text-danger" })
+                    </div><br /><br />
+                    @Html.DisplayNameFor(model => model.Night)
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.Night)
+                        @Html.ValidationMessageFor(model => model.Night, "", new { @class = "text-danger" })
+                    </div><br />
+                </div>
             </div>
-        </div>
+            @if (listoffixed != null)
+            {
+                <div class="col">
+                    <div class="table-responsive form-group">
+                        <table class="table table-condensed" style="text-align:center;">
+                            <tr class="tblheader">
+                                <th class="headercolor">
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th class="headercolor">
+                                    @Html.DisplayNameFor(model => model.Day)
+                                </th>
+                                <th class="headercolor">
+                                    @Html.DisplayNameFor(model => model.Morning)
+                                </th>
+                                <th class="headercolor">
+                                    @Html.DisplayNameFor(model => model.Afternoon)
+                                </th>
+                                <th class="headercolor">
+                                    @Html.DisplayNameFor(model => model.Night)
+                                </th>
+                                <th class="headercolor">
+                                    @Html.DisplayNameFor(model => model.Dates)
+                                </th>
+                            </tr>
 
+                            @foreach (var item in ViewBag.FixedList)
+                            {
+                            <tr>
+                                <td>
+                                    @item.Name
+                                </td>
+                                <td>
+                                    @item.Day
+                                </td>
+                                <td>
+                                    @if (item.Morning == true)
+                                    {
+                                        <i class="fas fa-check"></i>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Afternoon == true)
+                                    {
+                                        <i class="fas fa-check"></i>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Night == true)
+                                    {
+                                        <i class="fas fa-check"></i>
+                                    }
+                                </td>
+                                <td>
+                                    @item.Dates
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Delete", "Delete", new { id = @item.ID })
+                                </td>
+                            </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
         <br /><br />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

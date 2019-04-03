@@ -12,18 +12,18 @@ namespace ShiftManagerProject.Controllers
     {
         private ShiftManagerContext db = new ShiftManagerContext();
 
-        public void PrevWeeksDeletion()
+        public void HistoryDeletion()
         {
-            var count = db.PrevWeeks.ToList();
+            var count = db.History.ToList();
 
             if (count.Count() > 476)
             {
                 var counter = count.OrderBy(s => s.Dates.Date).ThenBy(s => s.OfDayType).Where(c => c.Day == "Saturday").FirstOrDefault().Dates.Date;
                 counter = counter.AddDays(1);
 
-                foreach (var shift in db.PrevWeeks.Where(d=>d.Dates < counter).ToList())
+                foreach (var shift in db.History.Where(d=>d.Dates < counter).ToList())
                 {
-                    db.PrevWeeks.Remove(shift);
+                    db.History.Remove(shift);
                 }
                 try
                 {
@@ -40,7 +40,7 @@ namespace ShiftManagerProject.Controllers
         {
             var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
             var countF = db.FinalShift.ToList();
-            if (countF.Count() >= (totalshifts*2))
+            if (countF.Count() >= totalshifts)
             {
                 foreach (var shift in db.FinalShift.Take(totalshifts))
                 {
@@ -95,12 +95,12 @@ namespace ShiftManagerProject.Controllers
         //    }
         //}
 
-        public void RemakeDeletion()
+        public void SavedScheduleDeletion()
         {
-                var RemakeList = db.Remake.ToList();
+                var RemakeList = db.SavedSchedule.ToList();
                 foreach (var shift in RemakeList)
                 {
-                    db.Remake.Remove(shift);
+                    db.SavedSchedule.Remove(shift);
                 }
                 try
                 {

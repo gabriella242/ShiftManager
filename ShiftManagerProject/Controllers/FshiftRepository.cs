@@ -29,7 +29,7 @@ namespace ShiftManagerProject.Controllers
 
             if (whattodo)
             {
-                int dayparameters = db.ScheduleParameters.Select(t => t.DMorning).Sum() + db.ScheduleParameters.Select(w => w.DAfternoon).Sum() + db.ScheduleParameters.Select(q => q.DNight).Sum();
+                int dayparameters = Convert.ToInt32(db.ScheduleParameters.Select(t => t.DMorning).Sum()) + Convert.ToInt32(db.ScheduleParameters.Select(w => w.DAfternoon).Sum()) + Convert.ToInt32(db.ScheduleParameters.Select(q => q.DNight).Sum());
                 int totalshifts = (db.ScheduleParameters.Select(x => x.Morning + x.Afternoon + x.Night).FirstOrDefault()) + dayparameters + 1;
                 int difftotal = (db.ScheduleParameters.Select(x => x.Morning + x.Afternoon + x.Night).FirstOrDefault()) + 1;
                 bool flag = true;
@@ -80,7 +80,7 @@ namespace ShiftManagerProject.Controllers
                         else if(db.ScheduleParameters.Where(t => t.Day == NDweek).Any() && flag)
                         {
                             var dayaddition = db.ScheduleParameters.Where(t => t.Day == NDweek).Select(t=>t.DMorning + t.DAfternoon + t.Night).Sum();
-                            x += dayaddition;
+                            x += Convert.ToInt32(dayaddition);
                             Mat[i, j] = x;
                             continue;
                         }
@@ -113,7 +113,7 @@ namespace ShiftManagerProject.Controllers
                     string Dweek = DayOfWeek(d);
                     var dayaddition = db.ScheduleParameters.Where(t => t.Day == Dweek).Select(t => t.DMorning).Any() ? db.ScheduleParameters.Where(t => t.Day == Dweek).Select(t => t.DMorning).Sum() : 0;
 
-                    for (k = dayaddition + mo + 1; num != Mat[k, d - 1]; k++)
+                    for (k = Convert.ToInt32(dayaddition) + mo + 1; num != Mat[k, d - 1]; k++)
                     {
                         while(num != Mat[k, d - 1])
                         {
@@ -134,7 +134,7 @@ namespace ShiftManagerProject.Controllers
                     string Dweek = DayOfWeek(d);
                     var dayaddition = db.ScheduleParameters.Where(t => t.Day == Dweek).Select(t => t.DAfternoon + t.DMorning).Any() ? db.ScheduleParameters.Where(t => t.Day == Dweek).Select(t => t.DAfternoon + t.DMorning).Sum() : 0;
 
-                    for (k = dayaddition + mo + af + 1; num != Mat[k, d - 1]; k++)
+                    for (k = Convert.ToInt32(dayaddition) + mo + af + 1; num != Mat[k, d - 1]; k++)
                     {
                         //num = Mat[k, d - 1] != 99 ? Mat[k, d - 1] : Mat[k + 1, d - 1] != 99 ? Mat[k + 1, d - 1] : 100;
 
@@ -503,7 +503,7 @@ namespace ShiftManagerProject.Controllers
 
         public void PrevShiftsRotation()
         {
-            PrevWeeks pweek = new PrevWeeks();
+            History pweek = new History();
             var fshift = db.FinalShift.ToList();
             foreach (var Fshift in fshift)
             {
@@ -537,7 +537,7 @@ namespace ShiftManagerProject.Controllers
                 {
                     pweek.Night = Fshift.Night;
                 }
-                db.PrevWeeks.Add(pweek);
+                db.History.Add(pweek);
                 db.SaveChanges();
             }
         }
@@ -633,7 +633,7 @@ namespace ShiftManagerProject.Controllers
             {
                 if (x == 1)
                 {
-                    var LastDay = db.PrevWeeks.OrderByDescending(r => DbFunctions.TruncateTime(r.Dates)).Take(totalshifts).OrderByDescending(c => c.OfDayType).Take(af + ni);
+                    var LastDay = db.History.OrderByDescending(r => DbFunctions.TruncateTime(r.Dates)).Take(totalshifts).OrderByDescending(c => c.OfDayType).Take(af + ni);
                     foreach (var LastShift in LastDay)
                     {
                         if (LastShift.EmployID == employee.ID)
@@ -664,7 +664,7 @@ namespace ShiftManagerProject.Controllers
             {
                 if (x == 1)
                 {
-                    var LastDay = db.PrevWeeks.OrderByDescending(r => DbFunctions.TruncateTime(r.Dates)).Take(totalshifts).OrderByDescending(c => c.OfDayType).Take(ni);
+                    var LastDay = db.History.OrderByDescending(r => DbFunctions.TruncateTime(r.Dates)).Take(totalshifts).OrderByDescending(c => c.OfDayType).Take(ni);
                     foreach (var lastday in LastDay)
                     {
                         if (lastday.EmployID == employee.ID)
@@ -706,7 +706,7 @@ namespace ShiftManagerProject.Controllers
             {
                 if (x == 1)
                 {
-                    var LastDay = db.PrevWeeks.OrderByDescending(r => DbFunctions.TruncateTime(r.Dates)).Take(totalshifts).OrderByDescending(c => c.OfDayType).Take(ni);
+                    var LastDay = db.History.OrderByDescending(r => DbFunctions.TruncateTime(r.Dates)).Take(totalshifts).OrderByDescending(c => c.OfDayType).Take(ni);
                     var PrevShifts = db.FinalShift.Where(k => k.Day == dayofweek);
 
                     foreach (var shift in PrevShifts)
@@ -872,9 +872,11 @@ namespace ShiftManagerProject.Controllers
         public bool CanAddShift(long ID)
         {
             var EmployShifts = db.FinalShift.Where(k => k.EmployID == ID);
-            ShiftPref pref = db.ShiftPref.SingleOrDefault(ShiftPref => ShiftPref.EmployID == ID);
+            //ShiftPref pref = db.ShiftPref.SingleOrDefault(ShiftPref => ShiftPref.EmployID == ID);
 
-            if (EmployShifts.Count() < pref.NoOfShifts)
+            Employees EmployS = db.Employees.Find(ID);
+
+            if (EmployShifts.Count() < EmployS.NoOfShifts)
             {
                 return true;
             }
@@ -1193,15 +1195,15 @@ namespace ShiftManagerProject.Controllers
             {
                 if (dayparameters.DMorning != 0)
                 {
-                    mo += dayparameters.DMorning;
+                    mo += Convert.ToInt32(dayparameters.DMorning);
                 }
                 if (dayparameters.DAfternoon != 0)
                 {
-                    af += dayparameters.DAfternoon;
+                    af += Convert.ToInt32(dayparameters.DAfternoon);
                 }
                 if (dayparameters.DNight != 0)
                 {
-                    ni += dayparameters.DNight;
+                    ni += Convert.ToInt32(dayparameters.DNight);
                 }
             }
 
@@ -1263,6 +1265,8 @@ namespace ShiftManagerProject.Controllers
             foreach (var emp in db.Employees.ToList())
             {
                 pref = db.ShiftPref.SingleOrDefault(ShiftPref => ShiftPref.EmployID == emp.ID);
+                Employees EmployS = db.Employees.Find(emp.ID);
+
                 if (pref == null)
                 {
                     continue;
@@ -1276,7 +1280,7 @@ namespace ShiftManagerProject.Controllers
                         {
                             val = (Boolean)shifts.GetValue(pref);
 
-                            if (val && (db.FinalShift.Where(p => p.EmployID == emp.ID).Count()) < pref.NoOfShifts)
+                            if (val && (db.FinalShift.Where(p => p.EmployID == emp.ID).Count()) < EmployS.NoOfShifts)
                             {
                                 prefshifts.Add(emp.FirstName);
                             }
@@ -1301,7 +1305,7 @@ namespace ShiftManagerProject.Controllers
             {
                 var empID = EmployeeList.Where(e => e.FirstName == emp).Select(w => w.ID).Single();
 
-                if (x == 1 && y == "M" ? db.PrevWeeks.OrderByDescending(r => DbFunctions.TruncateTime(r.Dates)).Take(totalshifts).OrderByDescending(c => c.OfDayType).Where(t => t.EmployID == empID && t.Day == "Saturday" && t.Night == true).Count() == 0 :
+                if (x == 1 && y == "M" ? db.History.OrderByDescending(r => DbFunctions.TruncateTime(r.Dates)).Take(totalshifts).OrderByDescending(c => c.OfDayType).Where(t => t.EmployID == empID && t.Day == "Saturday" && t.Night == true).Count() == 0 :
                     y == "M" ? FinalShiftList.Where(d => d.Day == DayOfWeek(x - 1) && d.Night == true && d.EmployID == empID).Count() == 0 :
                     y == "N" && x != 7 ? FinalShiftList.Where(q => q.Day == DayOfWeek(x + 1) && q.Morning == true && q.EmployID == empID).Count() == 0 : true)
                 {
@@ -1337,9 +1341,9 @@ namespace ShiftManagerProject.Controllers
             return DateOfNextWeekDay;
         }
 
-        public void SaveToRemakeTBL()
+        public void SaveToSavedScheduleTBL()
         {
-            Remake re = new Remake();
+            SavedSchedule re = new SavedSchedule();
             var fshift = db.FinalShift.ToList();
             foreach (var shift in fshift)
             {
@@ -1353,14 +1357,14 @@ namespace ShiftManagerProject.Controllers
                 re.EmployID = shift.EmployID;
                 re.Name = shift.Name;
 
-                db.Remake.Add(re);
+                db.SavedSchedule.Add(re);
                 db.SaveChanges();
             }
         }
 
         public void SaveRemakeToFinalTBL()
         {
-            var remakeList = db.Remake.ToList();
+            var remakeList = db.SavedSchedule.ToList();
             FinalShift re = new FinalShift();
 
             foreach (var shift in remakeList)
