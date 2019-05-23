@@ -1,6 +1,9 @@
 ﻿body {
     -webkit-font-smoothing: antialiased !important;
     -webkit-text-stroke: 1px rgba(0,0,0,0.1);
+    background-image: url(Images/action-trans70.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .type span {
@@ -114,3 +117,25 @@
     right: 62px;
 }
 
+.login_box {
+    opacity: .90;
+    width: 100%;
+    background: #f5f7fa;
+    padding-top: 46px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.top_marg{
+    margin-top:10%;
+}
+
+.form-control {
+   border: solid #ced4da !important;
+   width: 450px !important;
+}
+
+.centered {
+    text-align: center;
+}

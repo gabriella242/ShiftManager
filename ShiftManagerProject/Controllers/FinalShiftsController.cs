@@ -364,7 +364,7 @@ namespace ShiftManagerProject.Controllers
             var fileDownloadName = String.Format(DateTime.Now.ToString("dd/MM/yyyy") + " Shifts.xlsx");
             const string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-            // Pass your ef data to method
+            // Pass ef data to method
             ExcelPackage package = GenerateExcelFile(db.FinalShift.OrderBy(x => x.OfDayType).ToList());
 
             var fsr = new FileContentResult(package.GetAsByteArray(), contentType)

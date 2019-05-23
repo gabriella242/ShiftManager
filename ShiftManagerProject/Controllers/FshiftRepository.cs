@@ -77,9 +77,9 @@ namespace ShiftManagerProject.Controllers
                             flag = false;
                             continue;
                         }
-                        else if(db.ScheduleParameters.Where(t => t.Day == NDweek).Any() && flag)
+                        else if (db.ScheduleParameters.Where(t => t.Day == NDweek).Any() && flag)
                         {
-                            var dayaddition = db.ScheduleParameters.Where(t => t.Day == NDweek).Select(t=>t.DMorning + t.DAfternoon + t.Night).Sum();
+                            var dayaddition = db.ScheduleParameters.Where(t => t.Day == NDweek).Select(t => t.DMorning + t.DAfternoon + t.Night).Sum();
                             x += Convert.ToInt32(dayaddition);
                             Mat[i, j] = x;
                             continue;
@@ -115,7 +115,7 @@ namespace ShiftManagerProject.Controllers
 
                     for (k = Convert.ToInt32(dayaddition) + mo + 1; num != Mat[k, d - 1]; k++)
                     {
-                        while(num != Mat[k, d - 1])
+                        while (num != Mat[k, d - 1])
                         {
                             num = Mat[k, d - 1] == 99 ? 0 : Mat[k, d - 1];
                             if (num == Mat[k, d - 1])
@@ -1010,16 +1010,16 @@ namespace ShiftManagerProject.Controllers
         {
             ShiftPref prefshifts = new ShiftPref();
             List<Employees> employees = db.Employees.ToList();
-            var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();     
+            var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
             var val = false;
             FinalShift NewFinalS = new FinalShift();
             List<string> FirstLetter = new List<string>(new string[] { "", "M", "A", "N" });
             int[] counter = new int[4], TrueCounter = new int[4];
             int i, j = 0, y = 0, max = 0, TrueMax = 0;
             var dayparameters = db.ScheduleParameters.Where(o => o.Day != null).Any() ? db.ScheduleParameters.Where(o => o.Day != null).Select(o => o.Day).ToList().Last() : null;
-            if(dayparameters != null)
+            if (dayparameters != null)
             { for (i = 1; DayOfWeek(i) != dayparameters; i++) ; }
-            else { i = 1; }     
+            else { i = 1; }
             var daynumber = i;
 
             OfDayHandler(true, 0, 0);
@@ -1037,142 +1037,144 @@ namespace ShiftManagerProject.Controllers
 
             for (i = 1; i < 8; i++)
             {
-                foreach (var employ in employees)
+                if(!CheckDayShiftsExist(DayOfWeek(i)))
                 {
-                    prefshifts = db.ShiftPref.SingleOrDefault(ShiftPref => ShiftPref.EmployID == employ.ID);
-                    if (prefshifts == null)
+                    foreach (var employ in employees)
                     {
-                        continue;
-                    }
-
-                    foreach (var shifts in prefshifts.GetType().GetProperties())
-                    {
-                        if (shifts.Name.EndsWith(Convert.ToString(i)))
+                        prefshifts = db.ShiftPref.SingleOrDefault(ShiftPref => ShiftPref.EmployID == employ.ID);
+                        if (prefshifts == null)
                         {
-                            if (NewExistForNewCheckerP(i, shifts.Name.Substring(0, 1)))
-                            { continue; }
+                            continue;
+                        }
 
-                            val = (Boolean)shifts.GetValue(prefshifts);
-
-                            switch (shifts.Name.Substring(0, 1))
+                        foreach (var shifts in prefshifts.GetType().GetProperties())
+                        {
+                            if (shifts.Name.EndsWith(Convert.ToString(i)) && !(NewExistForNewCheckerP(i, shifts.Name.Substring(0, 1))))
                             {
-                                case "M":
-                                    if (!val)
-                                    {
-                                        counter[1] += 1;
-                                    }
-                                    else
-                                    {
-                                        TrueCounter[1] += 1;
-                                    }
-                                    break;
-                                case "A":
-                                    if (!val)
-                                    {
-                                        counter[2] += 1;
-                                    }
-                                    else
-                                    {
-                                        TrueCounter[2] += 1;
-                                    }
-                                    break;
-                                case "N":
-                                    if (!val)
-                                    {
-                                        counter[3] += 1;
-                                    }
-                                    else
-                                    {
-                                        TrueCounter[3] += 1;
-                                    }
-                                    break;
+                                //if (NewExistForNewCheckerP(i, shifts.Name.Substring(0, 1)))
+                                //{ continue; }
+
+                                val = (Boolean)shifts.GetValue(prefshifts);
+
+                                switch (shifts.Name.Substring(0, 1))
+                                {
+                                    case "M":
+                                        if (!val)
+                                        {
+                                            counter[1] += 1;
+                                        }
+                                        else
+                                        {
+                                            TrueCounter[1] += 1;
+                                        }
+                                        break;
+                                    case "A":
+                                        if (!val)
+                                        {
+                                            counter[2] += 1;
+                                        }
+                                        else
+                                        {
+                                            TrueCounter[2] += 1;
+                                        }
+                                        break;
+                                    case "N":
+                                        if (!val)
+                                        {
+                                            counter[3] += 1;
+                                        }
+                                        else
+                                        {
+                                            TrueCounter[3] += 1;
+                                        }
+                                        break;
+                                }
                             }
                         }
                     }
-                }
 
-                DayOfWeek day = new System.DayOfWeek();
-                string dday = DayOfWeek(i);
+                    DayOfWeek day = new System.DayOfWeek();
+                    string dday = DayOfWeek(i);
 
-                for (int d = 0; d < 7; d++)
-                {
-                    if (day.ToString() != dday)
+                    for (int d = 0; d < 7; d++)
                     {
-                        day = (DayOfWeek)((d + 1) % 7);
-                    }
-                    else { break; }
-                }
-
-                max = counter.ToList().IndexOf(counter.Max());
-                TrueMax = TrueCounter.ToList().IndexOf(TrueCounter.Max());
-
-                if (counter.Max() > 0)
-                {
-                    NewFinalS = NewCheckerP(i, FirstLetter[max]);
-                    if (NewFinalS == null)
-                    {
-                        NewFinalS = new FinalShift
+                        if (day.ToString() != dday)
                         {
-                            EmployID = 0,
-                            Name = null,
-                            Day = DayOfWeek(i)
-                        };
-                        switch (FirstLetter[max])
-                        {
-                            case "M":
-                                NewFinalS.Morning = true;
-                                break;
-                            case "A":
-                                NewFinalS.Afternoon = true;
-                                break;
-                            case "N":
-                                NewFinalS.Night = true;
-                                break;
+                            day = (DayOfWeek)((d + 1) % 7);
                         }
+                        else { break; }
                     }
-                    NewFinalS.OfDayType = OrderOfDayTypeHandler(i, max);
-                    NewFinalS.Dates = NextWeeksDates(day);
-                    db.FinalShift.Add(NewFinalS);
-                    db.SaveChanges();
-                }
-                else if (TrueCounter.Max() > 0 && counter.Max() == 0)
-                {
-                    NewFinalS = NewCheckerP(i, FirstLetter[TrueMax]);
-                    if (NewFinalS == null)
+
+                    max = counter.ToList().IndexOf(counter.Max());
+                    TrueMax = TrueCounter.ToList().IndexOf(TrueCounter.Max());
+
+                    if (counter.Max() > 0)
                     {
-                        NewFinalS = new FinalShift
+                        NewFinalS = NewCheckerP(i, FirstLetter[max]);
+                        if (NewFinalS == null)
                         {
-                            EmployID = 0,
-                            Name = null,
-                            Day = DayOfWeek(i)
-                        };
-                        switch (FirstLetter[TrueMax])
-                        {
-                            case "M":
-                                NewFinalS.Morning = true;
-                                break;
-                            case "A":
-                                NewFinalS.Afternoon = true;
-                                break;
-                            case "N":
-                                NewFinalS.Night = true;
-                                break;
+                            NewFinalS = new FinalShift
+                            {
+                                EmployID = 0,
+                                Name = null,
+                                Day = DayOfWeek(i)
+                            };
+                            switch (FirstLetter[max])
+                            {
+                                case "M":
+                                    NewFinalS.Morning = true;
+                                    break;
+                                case "A":
+                                    NewFinalS.Afternoon = true;
+                                    break;
+                                case "N":
+                                    NewFinalS.Night = true;
+                                    break;
+                            }
                         }
+                        NewFinalS.OfDayType = OrderOfDayTypeHandler(i, max);
+                        NewFinalS.Dates = NextWeeksDates(day);
+                        db.FinalShift.Add(NewFinalS);
+                        db.SaveChanges();
                     }
-                    NewFinalS.OfDayType = OrderOfDayTypeHandler(i, TrueMax);
-                    NewFinalS.Dates = NextWeeksDates(day);
-                    db.FinalShift.Add(NewFinalS);
-                    db.SaveChanges();
-                }
+                    else if (TrueCounter.Max() > 0 && counter.Max() == 0)
+                    {
+                        NewFinalS = NewCheckerP(i, FirstLetter[TrueMax]);
+                        if (NewFinalS == null)
+                        {
+                            NewFinalS = new FinalShift
+                            {
+                                EmployID = 0,
+                                Name = null,
+                                Day = DayOfWeek(i)
+                            };
+                            switch (FirstLetter[TrueMax])
+                            {
+                                case "M":
+                                    NewFinalS.Morning = true;
+                                    break;
+                                case "A":
+                                    NewFinalS.Afternoon = true;
+                                    break;
+                                case "N":
+                                    NewFinalS.Night = true;
+                                    break;
+                            }
+                        }
+                        NewFinalS.OfDayType = OrderOfDayTypeHandler(i, TrueMax);
+                        NewFinalS.Dates = NextWeeksDates(day);
+                        db.FinalShift.Add(NewFinalS);
+                        db.SaveChanges();
+                    }
 
-                counter[0] = counter[1] = counter[2] = counter[3] = 0;
-                TrueCounter[0] = TrueCounter[1] = TrueCounter[2] = TrueCounter[3] = 0;
+                    counter[0] = counter[1] = counter[2] = counter[3] = 0;
+                    TrueCounter[0] = TrueCounter[1] = TrueCounter[2] = TrueCounter[3] = 0;
 
-                j++;
+                    j++;
 
-                i = j + 1 < (totalshifts + daynumber) ? i : 9;
-                i = i + 1 == 8 ? 0 : i;
-
+                    i = j + 1 < (totalshifts + daynumber) ? i : 9;
+                    i = i + 1 == 8 ? 0 : i;
+                }            
             }
         }
 
@@ -1212,43 +1214,41 @@ namespace ShiftManagerProject.Controllers
                 switch (y)
                 {
                     case "M":
-                        foreach (var shift in futureShifts)
-                        {
-                            if (shift.Morning == true)
-                            {
-                                flag++;
-                            }
-                        }
-                        if (flag == mo)
-                        {
-                            return true;
-                        }
+                        //foreach (var shift in futureShifts.Where(m => m.Morning == true))
+                        //{
+                        //    flag++;
+                        //}
+                        //if (flag == mo)
+                        //{
+                        //    return true;
+                        //}
+
+                        if(futureShifts.Where(m => m.Morning == true).Count() == mo)
+                        { return true;  }
                         break;
                     case "A":
-                        foreach (var shift in futureShifts)
-                        {
-                            if (shift.Afternoon == true)
-                            {
-                                flag++;
-                            }
-                            if (flag == af)
-                            {
-                                return true;
-                            }
-                        }
+                        //foreach (var shift in futureShifts.Where(a => a.Afternoon == true))
+                        //{
+                        //    flag++;
+                        //}
+                        //if (flag == af)
+                        //{
+                        //    return true;
+                        //}
+                        if (futureShifts.Where(m => m.Afternoon == true).Count() == af)
+                        { return true; }
                         break;
                     case "N":
-                        foreach (var shift in futureShifts)
-                        {
-                            if (shift.Night == true)
-                            {
-                                flag++;
-                            }
-                            if (flag == ni)
-                            {
-                                return true;
-                            }
-                        }
+                        //foreach (var shift in futureShifts.Where(n => n.Night == true))
+                        //{
+                        //    flag++;
+                        //}
+                        //if (flag == ni)
+                        //{
+                        //    return true;
+                        //}
+                        if (futureShifts.Where(m => m.Night == true).Count() == ni)
+                        { return true; }
                         break;
                 }
             }
@@ -1382,6 +1382,17 @@ namespace ShiftManagerProject.Controllers
                 db.FinalShift.Add(re);
                 db.SaveChanges();
             }
+        }
+
+        public bool CheckDayShiftsExist(string day)
+        {
+            var settings = db.ScheduleParameters.Select(d => d.Morning + d.Afternoon + d.Night).Sum();
+            var Dsettings = db.ScheduleParameters.Where(g => g.Day != null).Count() != 0 ? db.ScheduleParameters.Where(f => f.Day == day).Select(w => w.DMorning + w.DAfternoon + w.DNight).Sum(): 0;
+            if(db.FinalShift.Where(x=>x.Day == day).Count() == settings + Dsettings)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

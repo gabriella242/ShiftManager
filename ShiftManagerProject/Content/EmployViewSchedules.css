@@ -17,3 +17,15 @@
     color: blueviolet;
     font-family: 'Coiny', cursive;
 }
+
+.shifts {
+    color: black;
+}
+
+mark {
+    background-color: yellow !important;
+}
+
+label{
+    color:black;
+}

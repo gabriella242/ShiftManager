@@ -65,7 +65,7 @@ namespace ShiftManagerProject.Controllers
         public ActionResult LastWeek()
         {          
             HsDelete.HistoryDeletion();
-            HsDelete.FshiftDeletion();
+            //HsDelete.FshiftDeletion();
 
             var context = ((IObjectContextAdapter)db).ObjectContext;
             var refreshableObjects = db.ChangeTracker.Entries().Select(c => c.Entity).ToList();

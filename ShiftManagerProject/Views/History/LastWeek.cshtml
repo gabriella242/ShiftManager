@@ -12,7 +12,9 @@
 
     List<string> WeekDay = new List<string>(new string[] { "", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" });
 }
+
 <link rel="stylesheet" type="text/css" href="~/Content/EmployViewSchedules.css" />
+
 @if (ViewBag.ShiftUpdate != 0)
 {
     <h3 class="msg">No Shifts Available</h3>
@@ -37,26 +39,35 @@ else
             </tr>
 
             <tr>
-                <td class="table-info bold">
+                <td class="table-info bold shifts">
                     @Html.DisplayNameFor(model => model.Morning)
                 </td>
 
                 @foreach (var day in Model.Select(x => x.Day).Distinct())
                 {
-                    <td class="tbl">
-                        @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Morning == true).OrderBy(m => m.OfDayType).ToList())
+                <td class="tbl">
+                    @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Morning == true).OrderBy(m => m.OfDayType).ToList())
+                    {
+                        if (Mshift.Name.IsEmpty())
                         {
-                            if (Mshift.Name.IsEmpty())
+                            @Html.Label("")
+                        }
+                        else
+                        {
+                            if ((string)System.Web.HttpContext.Current.Session["UserSess"] == Mshift.Name)
                             {
-                                @Html.ActionLink("Update", "Edit", new { id = Mshift.ID }, new { @class = "badge badge-danger" })
+                                <mark>
+                                    @Html.Label(Mshift.Name)
+                                </mark>
                             }
                             else
                             {
-                                @Html.ActionLink(Mshift.Name, "Edit", new { id = Mshift.ID }, new { @class = Mshift.Name })
+                                @Html.Label(Mshift.Name)
                             }
-                            <br />
                         }
-                    </td>
+                        <br />
+                    }
+                </td>
                     counter++;
                 }
             </tr>
@@ -64,27 +75,36 @@ else
             @{ counter = 1; }
 
             <tr>
-                <td class="table-info bold">
+                <td class="table-info bold shifts">
                     @Html.DisplayNameFor(model => model.Afternoon)
                 </td>
 
 
                 @foreach (var day in Model.Select(x => x.Day).Distinct())
                 {
-                    <td class="tbl">
-                        @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Afternoon == true).OrderBy(m => m.OfDayType).ToList())
+                <td class="tbl">
+                    @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Afternoon == true).OrderBy(m => m.OfDayType).ToList())
+                    {
+                        if (Mshift.Name.IsEmpty())
                         {
-                            if (Mshift.Name.IsEmpty())
+                            @Html.Label("")
+                        }
+                        else
+                        {
+                            if ((string)System.Web.HttpContext.Current.Session["UserSess"] == Mshift.Name)
                             {
-                                @Html.ActionLink("Update", "Edit", new { id = Mshift.ID }, new { @class = "badge badge-danger" })
+                                <mark>
+                                    @Html.Label(Mshift.Name)
+                                </mark>
                             }
                             else
                             {
-                                @Html.ActionLink(Mshift.Name, "Edit", new { id = Mshift.ID }, new { @class = Mshift.Name })
+                                @Html.Label(Mshift.Name)
                             }
-                            <br />
                         }
-                    </td>
+                        <br />
+                    }
+                </td>
                     counter++;
                 }
             </tr>
@@ -92,27 +112,36 @@ else
             @{ counter = 1; }
 
             <tr>
-                <td class="table-info bold">
+                <td class="table-info bold shifts">
                     @Html.DisplayNameFor(model => model.Night)
                 </td>
 
 
                 @foreach (var day in Model.Select(x => x.Day).Distinct())
                 {
-                    <td class="tbl">
-                        @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Night == true).OrderBy(m => m.OfDayType).ToList())
+                <td class="tbl">
+                    @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Night == true).OrderBy(m => m.OfDayType).ToList())
+                    {
+                        if (Mshift.Name.IsEmpty())
                         {
-                            if (Mshift.Name.IsEmpty())
+                            @Html.Label("")
+                        }
+                        else
+                        {
+                            if ((string)System.Web.HttpContext.Current.Session["UserSess"] == Mshift.Name)
                             {
-                                @Html.ActionLink("Update", "Edit", new { id = Mshift.ID }, new { @class = "badge badge-danger" })
+                                <mark>
+                                    @Html.Label(Mshift.Name)
+                                </mark>
                             }
                             else
                             {
-                                @Html.ActionLink(Mshift.Name, "Edit", new { id = Mshift.ID }, new { @class = Mshift.Name })
+                                @Html.Label(Mshift.Name)
                             }
-                            <br />
                         }
-                    </td>
+                        <br />
+                    }
+                </td>
                     counter++;
                 }
             </tr>

@@ -40,20 +40,20 @@ else
 
                 @foreach (var day in Model.Select(x => x.Day).Distinct())
                 {
-                <td class="tbl">
-                    @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Morning == true).OrderBy(m => m.OfDayType).ToList())
-                    {
-                        if (Mshift.Name.IsEmpty())
+                    <td class="tbl">
+                        @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Morning == true).OrderBy(m => m.OfDayType).ToList())
                         {
-                            @Html.Label(" ")
+                            if (Mshift.Name.IsEmpty())
+                            {
+                                @Html.Label(" ")
+                            }
+                            else
+                            {
+                                @Html.Label(Mshift.Name)
+                            }
+                            <br />
                         }
-                        else
-                        {
-                            @Html.Label(Mshift.Name)
-                        }
-                        <br />
-                    }
-                </td>
+                    </td>
                     counter++;
                 }
             </tr>
@@ -68,20 +68,20 @@ else
 
                 @foreach (var day in Model.Select(x => x.Day).Distinct())
                 {
-                <td class="tbl">
-                    @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Afternoon == true).OrderBy(m => m.OfDayType).ToList())
-                    {
-                        if (Mshift.Name.IsEmpty())
+                    <td class="tbl">
+                        @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Afternoon == true).OrderBy(m => m.OfDayType).ToList())
                         {
-                            @Html.Label(" ")
+                            if (Mshift.Name.IsEmpty())
+                            {
+                                @Html.Label(" ")
+                            }
+                            else
+                            {
+                                @Html.Label(Mshift.Name)
+                            }
+                            <br />
                         }
-                        else
-                        {
-                            @Html.Label(Mshift.Name)
-                        }
-                        <br />
-                    }
-                </td>
+                    </td>
                     counter++;
                 }
             </tr>
@@ -96,22 +96,22 @@ else
 
                 @foreach (var day in Model.Select(x => x.Day).Distinct())
                 {
-                <td class="tbl">
-                    @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Night == true).OrderBy(m => m.OfDayType).ToList())
-                    {
-                        if (Mshift.Name.IsEmpty())
+                    <td class="tbl">
+                        @foreach (var Mshift in Model.Where(x => x.Day == WeekDay[counter] && x.Night == true).OrderBy(m => m.OfDayType).ToList())
                         {
-                            @Html.Label(" ")
+                            if (Mshift.Name.IsEmpty())
+                            {
+                                @Html.Label(" ")
+                            }
+                            else
+                            {
+                                @Html.Label(Mshift.Name)
+                            }
+                            <br />
                         }
-                        else
-                        {
-                            @Html.Label(Mshift.Name)
-                        }
-                        <br />
-                    }
-                </td>
-                        counter++;
-                    }
+                    </td>
+                    counter++;
+                }
             </tr>
         </table>
         <br />
@@ -133,6 +133,15 @@ else
 }
 else if (ViewBag.msg != 0)
 {
-    @Html.ActionLink("Submit", "SaveTheSchedule", "FinalShifts", new { id = true }, new { @class = "btn btn-success SavedSubmitBTN" })
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col-11">
+                @Html.ActionLink("Submit", "SaveTheSchedule", "FinalShifts", new { id = true }, new { @class = "btn btn-success SubmitSch" })
+            </div>
+        </div>
+    </div>
 }
 <br /><br />

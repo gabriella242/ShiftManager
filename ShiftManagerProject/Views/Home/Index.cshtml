@@ -6,58 +6,67 @@
 <link rel="stylesheet" type="text/css" href="~/Content/HomePage.css" />
 <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
 
+@*<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>*@
+
 <br />
 @{
     string user = @Html.Encode(Session["UserSess"]);
     string admin = @Html.Encode(Session["admin"]);
 }
+
 <br />
-
-@if (user == "")
-{
-    <h2>Login</h2>
-    <div class="row">
-        <div class="col-md-8">
-            <section id="loginForm">
-                @using (Html.BeginForm("Index", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                {
-                    @Html.AntiForgeryToken()
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                        <div class="col-md-10">
-                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+<div class="container">
+    @if (user == "")
+    {
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4 login_box top_marg">
+                <h2 class="centered">Login</h2>
+                <section id="loginForm">
+                    @using (Html.BeginForm("Index", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Pass, new { @class = "col-md-2 control-label" })
-                        <div class="col-md-10">
-                            @Html.PasswordFor(m => m.Pass, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Pass, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Pass, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.PasswordFor(m => m.Pass, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Pass, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Log in" class="btn btn-default" />
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 centered top_marg">
+                                <input type="submit" value="Log in" class="btn btn-default" />
+                            </div>
                         </div>
-                    </div>
-                }
-            </section>
+                    }
+                </section>
+            </div>
         </div>
-    </div>
-}
-else
-{
-    <div class="type">
-        <span>Welcome back</span>
-        <span>@user!</span>
-        <span></span>
-    </div>
+    }
+    else
+    {
+        <div class="login_box">
+            <div class="type">
+                <span>Welcome back</span>
+                <span>@user!</span>
+                <span></span>
+            </div>
 
-    <div id="chest">
-        <div class="heart left side top"></div>
-        <div class="heart center">&hearts;</div>
-        <div class="heart right side"></div>
-    </div>
-}
+            <div id="chest">
+                <div class="heart left side top"></div>
+                <div class="heart center">&hearts;</div>
+                <div class="heart right side"></div>
+            </div>
+        </div>
+    }
+</div>

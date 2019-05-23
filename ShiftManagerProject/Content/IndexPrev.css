@@ -20,3 +20,36 @@ table {
 .centered{
     text-align:center;
 }
+
+@media only screen and (max-width: 414px) {
+
+    .respon {
+        margin-bottom: 5%;
+        position: inherit;
+        right: -33%;
+    }
+
+    .responAlign{
+        text-align:center;
+    }
+
+
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .respon {
+        position: inherit;
+        right: 18px;
+    }
+
+    .responAlign {
+        text-align: right;
+    }
+}
+
+@media only screen and (min-width: 1023px) and (max-width: 1024px) {
+
+    .responAlign {
+        text-align: right;
+    }
+}

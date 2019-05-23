@@ -11,3 +11,43 @@
     font-family: 'Kalam', cursive;
     color: mediumpurple;
 }
+
+.side_menubtn {
+    position: absolute;
+    top: 10%;
+    right: 5%;
+}
+
+.rightsidename{
+    position:absolute;
+    right:20%;
+}
+
+.rightsidelog {
+    position: absolute;
+    right: 30%;
+}
+
+@media only screen and (max-width: 575px) {
+    .rightsidename {
+        position: relative;
+        right: -5;
+    }
+
+    .rightsidelog {
+        position: relative;
+        right: 15%;
+        padding-top: 5%;
+    }
+
+    #navbarColor03 {
+        position: relative;
+        right: 15%;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .rightsidename{
+        right:75px !important;
+    }
+}

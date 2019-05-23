@@ -318,6 +318,14 @@
     <Content Include="Content\FixedFinalShift.css" />
     <Content Include="Content\HomePage.css" />
     <Content Include="Content\EmployViewSchedules.css" />
+    <Content Include="Content\Images\achievement-3408115_1920.jpg" />
+    <Content Include="Content\Images\action-2277292_1920.jpg" />
+    <Content Include="Content\Images\action-trans70.jpg" />
+    <Content Include="Content\Images\apple-2568755_1280.jpg" />
+    <Content Include="Content\Images\blog-3428667_1920.jpg" />
+    <Content Include="Content\Images\laptop-3190194_1920.jpg" />
+    <Content Include="Content\Images\paper-3213924_1920.jpg" />
+    <Content Include="Content\Images\time-371226_1920.jpg" />
     <Content Include="Content\ScheduleParameters.css" />
     <Content Include="Content\ShiftPrefIndex.css" />
     <Content Include="Content\IndexPrev.css" />
@@ -335,6 +343,7 @@
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Content\Images\Gshift.png" />
+    <Content Include="Content\Images\notebook-1280538_1920.jpg" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -353,6 +362,7 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
+    <None Include="Properties\PublishProfiles\TempWebsite.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -378,7 +388,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />

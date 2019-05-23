@@ -1,37 +1,42 @@
 ﻿@using System.Security.Claims
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="~/Content/LayoutPage.css" />
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+
     <title>@ViewBag.Title - NOC Shift Manager</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
 </head>
 
 <body>
     <div class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <div class="navbar-brand" style="width:120px;">
-                @Html.ActionLink("NOC Shift Manager", "Index", "Home", new { area = "" }, new { @class = "navbar-brand logo" })
-                <div class="hidden-lg-up my-2 mr-3">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+                    @Html.ActionLink("NOC Shift Manager", "Index", "Home", new { area = "" }, new { @class = "navbar-brand logo" })
+                    <div class="hidden-lg-up my-2 mr-3">
+                    <button class="navbar-toggler side_menubtn " type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                 </div>
-            </div>
+                </div>
 
             <div class="collapse navbar-collapse" id="navbarColor03">
                 <ul class="navbar-nav mr-auto">
                     @if (System.Web.HttpContext.Current.Session["admin"] != null)
                     {
+
                         if ((bool)System.Web.HttpContext.Current.Session["admin"] == true)
                         {
-                            <li class="nav-item dropdown">
+                            <li class="nav-item dropdown ml-auto">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: black;display: inline;">Admin</a>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position:absolute; will-change: transform;">
                                     @Html.ActionLink("Settings", "Index", "ScheduleParameters", null, new { @class = "dropdown-item" })
@@ -48,7 +53,7 @@
                         }
                         else
                         {
-                            <li class="nav-item">
+                            <li class="nav-item ml-auto">
                                 @Html.ActionLink("Your Preferences", "Index", "ShiftPrefs")
                             </li>
                         }
@@ -58,10 +63,10 @@
                     {
                         if ((bool)System.Web.HttpContext.Current.Session["admin"] == true)
                         {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: black;display: inline;">History</a>
+                            <li class="nav-item dropdown ml-auto">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: black;display: inline;">Schedule</a>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position:absolute; will-change: transform;">
-                                    @Html.ActionLink("Shift History", "Index", "History", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Next Week's Schedule", "Index", "FinalShifts", null, new { @class = "dropdown-item" })
                                     <div class="dropdown-divider"></div>
                                     @Html.ActionLink("This Week's Schedule", "LastWeek", "History", null, new { @class = "dropdown-item" })
                                 </div>
@@ -69,18 +74,18 @@
                         }
                         else
                         {
-                            <li class="nav-item">
+                            <li class="nav-item ml-auto">
                                 @Html.ActionLink("This Week's Schedule", "LastWeek", "History")
                             </li>
                         }
                     }
 
-                    <li class="nav-item">
+                    <li class="nav-item ml-auto">
                         @if (System.Web.HttpContext.Current.Session["admin"] != null)
                         {
                             if ((bool)System.Web.HttpContext.Current.Session["admin"] == true)
                             {
-                                @Html.ActionLink("Schedule", "Index", "FinalShifts")
+                                @Html.ActionLink("History", "Index", "History")
                             }
                             else
                             {
@@ -88,35 +93,33 @@
                             }
                         }
                     </li>
+
+                        <li class="nav-item ml-auto rightsidelog" id="fullscr">
+                            @if (System.Web.HttpContext.Current.Session["UserSess"] != null)
+                            {
+                                @Html.ActionLink("Log Out", "Logout", "Home")
+                            }
+                            else
+                            {
+                                @*@Html.ActionLink("Log In", "Index", "Home")*@
+                            }
+                        </li>
+                        <li class="nav-item ml-auto namestyle rightsidename" id="fullscr2">
+                            @if (System.Web.HttpContext.Current.Session["UserSess"] != null)
+                            {
+                                <strong>Howdy @Html.Encode(Session["UserSess"]) !</strong>
+                            }
+                        </li>
+ 
                 </ul>
-            </div>
-            <div class="col">
-                <ul style="width:auto; align-content:stretch;" class="nav navbar-right mr-auto">
-                    <li class="nav-item namestyle">
-                        @if (System.Web.HttpContext.Current.Session["UserSess"] != null)
-                        {
-                            <strong>Howdy @Html.Encode(Session["UserSess"]) !</strong>
-                        }
-                    </li>
-                    <li class="nav-item">
-                        @if (System.Web.HttpContext.Current.Session["UserSess"] != null)
-                        {
-                            @Html.ActionLink("Log Out", "Logout", "Home")
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Log In", "Index", "Home")
-                        }
-                    </li>
-                </ul>
-            </div>
+                </div>
         </div>
     </div>
     <br /><br />
     <div class="container body-content">
         @RenderBody()
-        <hr style="width:100%;" />
-        <footer style="bottom:0;">
+        <hr style="width:100%;margin-top:15%;" />
+        <footer>
             <p>&copy; @DateTime.Now.Year - Gabriella <i class="fab fa-studiovinari"></i> </p>
         </footer>
     </div>

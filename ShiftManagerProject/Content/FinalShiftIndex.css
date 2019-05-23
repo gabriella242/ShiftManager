@@ -44,3 +44,9 @@ label{
     font-weight:600;
 }
 
+.SubmitSch {
+    position: absolute;
+    top: 26%;
+    right: 0;
+    margin-top: 2%;
+}
