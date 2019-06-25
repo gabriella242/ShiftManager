@@ -278,7 +278,7 @@ namespace ShiftManagerProject.Controllers
             //    EnableSsl = true,
             //    DeliveryMethod = SmtpDeliveryMethod.Network,
             //    UseDefaultCredentials = false,
-            //    Credentials = new NetworkCredential("nocshiftmaster@gmail.com", "buefifa19")
+            //    Credentials = new NetworkCredential(" YOUR EMAIL", " YOUR PASSWORD")
             //};
 
             //foreach(var emp in db.Employees.ToList())
@@ -550,7 +550,7 @@ namespace ShiftManagerProject.Controllers
                     EnableSsl = true,
                     DeliveryMethod = SmtpDeliveryMethod.Network,
                     UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(" YOUR EMAIL", " YOUR PASSWORD ")
+                    Credentials = new NetworkCredential(" YOUR EMAIL", "YOUR PASSWORD ")
                 };
 
 
