@@ -12,6 +12,9 @@ using ShiftManagerProject.Models;
 using System.Net.Mail;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 
 namespace ShiftManagerProject.Controllers
 {
@@ -60,10 +63,87 @@ namespace ShiftManagerProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Fixed(FinalShift FixedShift)
         {
+            if((FixedShift.Morning == true &&  FixedShift.Afternoon == true) ||
+                (FixedShift.Morning == true && FixedShift.Night == true) || 
+                (FixedShift.Afternoon == true && FixedShift.Night == true) || 
+                (FixedShift.Morning == true && FixedShift.Afternoon == true && FixedShift.Night == true))
+            {
+                ModelState.AddModelError("Night", "Choose one shift");
+                FixedShift.Employees = db.Employees.Where(x => x.Admin == false).ToList(); ;
+                return View(FixedShift);
+            }
+
+            var employ = db.Employees.Where(x => x.Admin == false).ToList();
+            var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
+            DateTime NextSunday = DateTime.Now.AddDays(1);
+            while (NextSunday.DayOfWeek != DayOfWeek.Sunday)
+            { NextSunday = NextSunday.AddDays(1); }
+            var listofFixed = new List<FinalShift>();
+            if ((db.FinalShift.Where(s => s.Dates > NextSunday.Date).Count() <= totalshifts / 2) && db.FinalShift.Count() > 0)
+            {
+                foreach (var shift in db.FinalShift.Where(e => e.Dates > NextSunday.Date).ToList())
+                {
+                    listofFixed.Add(shift);
+                }
+            }
+
+            ViewBag.FixedList = listofFixed;
+            var xyz = listofFixed.Where(w=>w.Day == FixedShift.Day && w.Name == FixedShift.Name).Count();
+
+
+            if (xyz > 0)
+            {
+                ModelState.AddModelError("Name", "This employee has already been placed on this day");
+                FixedShift.Employees = employ;
+                return View(FixedShift);
+            }
+
+            if (FixedShift.Morning == true)
+            {
+                var x = db.ScheduleParameters.Select(c => c.Morning).FirstOrDefault();
+                var w = db.ScheduleParameters.Where(d => d.Day == FixedShift.Day).Select(d => d.DMorning).FirstOrDefault();
+                if(w == null) { w = 0; }
+                var p = db.FinalShift.Where(f => f.Day == FixedShift.Day && f.Morning == true).Count();
+                if (p >= (x + w))
+                {
+                    ModelState.AddModelError("Night", "Maximum employees per shift. Please update the settings to allow more employees");
+                    FixedShift.Employees = employ;
+                    return View(FixedShift);
+                }
+
+            }
+            else if(FixedShift.Afternoon == true)
+            {
+                var x = db.ScheduleParameters.Select(c => c.Afternoon).FirstOrDefault();
+                var w = db.ScheduleParameters.Where(d => d.Day == FixedShift.Day).Select(d => d.DAfternoon).FirstOrDefault();
+                if (w == null) { w = 0; }
+                var p = db.FinalShift.Where(f => f.Day == FixedShift.Day && f.Afternoon == true).Count();
+                if (p >= (x + w))
+                {
+                    ModelState.AddModelError("Night", "Maximum employees per shift, please update the settings to allow more employees");
+                    FixedShift.Employees = employ;
+                    return View(FixedShift);
+                }
+
+            }
+            else
+            {
+                var x = db.ScheduleParameters.Select(c => c.Night).FirstOrDefault();
+                var w = db.ScheduleParameters.Where(d => d.Day == FixedShift.Day).Select(d => d.DNight).FirstOrDefault();
+                if (w == null) { w = 0; }
+                var p = db.FinalShift.Where(f => f.Day == FixedShift.Day && f.Night == true).Count();
+                if (p >= (x + w))
+                {
+                    ModelState.AddModelError("Night", "Maximum employees per shift, please update the settings to allow more employees");
+                    FixedShift.Employees = employ;
+                    return View(FixedShift);
+                }
+
+            }
+
             bool flag = false;
             int i, y;
             Employees Emp = db.Employees.FirstOrDefault(x => x.FirstName == FixedShift.Name);
-            var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
             for (i = 1; FSrespo.DayOfWeek(i) != FixedShift.Day; i++) ;
             y = FixedShift.Morning == true ? 0 : FixedShift.Afternoon == true ? 2 : 3;
 
@@ -133,7 +213,8 @@ namespace ShiftManagerProject.Controllers
             HsDelete.HistoryDeletion();
             HsDelete.SpecialFixedFshiftDeletion();
 
-            FSrespo.LeastShiftPref();
+            FSrespo.NewLChecker();
+            //FSrespo.LeastShiftPref();
             return RedirectToAction("Index");
         }
 
@@ -160,7 +241,28 @@ namespace ShiftManagerProject.Controllers
         {
             FSrespo.PrevShiftsRotation();
             HsDelete.HistoryDeletion();
-            var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
+            string ShiftsBody = null;
+            foreach (var shift in db.FinalShift.Where(d => d.EmployID == 327339339).ToList())
+            {
+                ShiftsBody += shift.Dates.ToString("dd/MM/yyyy") + " -> " + shift.Day + " " + (shift.Morning == true ? "Morning" : shift.Afternoon == true ? "Afternoon" : "Night") + ", ";
+            }
+
+            const string accountSid = "ACf5f149a9c569d36575a2320d60ed4281";
+            const string authToken = "794bf494659491d04411de9f0ce64d72";
+            TwilioClient.Init(accountSid, authToken);
+            var mediaUrl = 
+            new Uri( "https://climacons.herokuapp.com/clear.png" );
+            var to = new PhoneNumber("  PHONER NUMBER ");
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+                                                | SecurityProtocolType.Tls11
+                                                | SecurityProtocolType.Tls12
+                                                | SecurityProtocolType.Ssl3;
+            var message = MessageResource.Create(
+              to: to,
+              from: new PhoneNumber("+18646101609"),
+              body: "Your shifts for next week are: " + ShiftsBody);
+            Console.WriteLine(message.Sid);
+            //var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
 
             //DateTime nextSunday = DateTime.Now.AddDays(1);
             //while (nextSunday.DayOfWeek != DayOfWeek.Sunday)
@@ -176,7 +278,7 @@ namespace ShiftManagerProject.Controllers
             //    EnableSsl = true,
             //    DeliveryMethod = SmtpDeliveryMethod.Network,
             //    UseDefaultCredentials = false,
-            //    Credentials = new NetworkCredential("", "")
+            //    Credentials = new NetworkCredential("nocshiftmaster@gmail.com", "buefifa19")
             //};
 
             //foreach(var emp in db.Employees.ToList())
@@ -191,7 +293,7 @@ namespace ShiftManagerProject.Controllers
             //{
             //    MailMessage mailMessage = new MailMessage
             //    {
-            //        From = new MailAddress("nocshiftmaster@gmail.com")
+            //        From = new MailAddress(" YOUR EMAIL ")
             //    };
             //    mailMessage.To.Add(new MailAddress(employee.Email));
             //    mailMessage.Subject = "Your work schedule has been updated!";
@@ -419,6 +521,51 @@ namespace ShiftManagerProject.Controllers
             return pck;
         }
 
+        public ActionResult Message(string employees, string new_message, Boolean? sms, Boolean? email)
+        {
+            if(sms == true)
+            {
+                const string accountSid = "ACf5f149a9c569d36575a2320d60ed4281";
+                const string authToken = "794bf494659491d04411de9f0ce64d72";
+                TwilioClient.Init(accountSid, authToken);
+                var mediaUrl =
+                new Uri("https://climacons.herokuapp.com/clear.png");
+                var to = new PhoneNumber(" YOUR TELEPHONE NUMBER ");
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+                                                    | SecurityProtocolType.Tls11
+                                                    | SecurityProtocolType.Tls12
+                                                    | SecurityProtocolType.Ssl3;
+                var message = MessageResource.Create(
+                  to: to,
+                  from: new PhoneNumber("+18646101609"),
+                  body: "Important message from the manager:  " + new_message);
+                Console.WriteLine(message.Sid);
+            }
+            if(email == true)
+            {
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(" YOUR EMAIL", " YOUR PASSWORD ")
+                };
+
+
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        From = new MailAddress("YOUR EMAIL ")
+                    };
+                    mailMessage.To.Add(new MailAddress(db.Employees.Where(d => d.FirstName == employees).Select(d => d.Email).FirstOrDefault()));
+                    mailMessage.Subject = "Important message from the manager!";
+                    mailMessage.Body = new_message;
+                    smtp.Send(mailMessage);
+            }
+
+            return RedirectToAction("ListOfShifts");
+        }
 
         protected override void Dispose(bool disposing)
         {

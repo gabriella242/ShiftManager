@@ -75,6 +75,11 @@ namespace ShiftManagerProject.Controllers
                 ModelState.AddModelError("NoOfShifts", "Positive Numbers Only");
                 return View(employees);
             }
+            if (employees.Telephone.Any(char.IsLetter))
+            {
+                ModelState.AddModelError("Telephone", "Numbers Only");
+                return View(employees);
+            }
 
             if (ModelState.IsValid)
             {

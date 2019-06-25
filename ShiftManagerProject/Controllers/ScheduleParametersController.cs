@@ -41,8 +41,13 @@ namespace ShiftManagerProject.Controllers
         }
 
 
-        public ActionResult DayCreate(bool? whattodo, bool? require)
+        public ActionResult DayCreate(bool? whattodo, bool? require, bool? dayexists)
         {
+            if(dayexists == true)
+            {
+                ModelState.AddModelError("Day", "Day already exists! Please add all additions to existing day");
+                return View();
+            }
             if(require == true)
             {
                 ModelState.AddModelError("Day", "Day is Required");
@@ -82,6 +87,10 @@ namespace ShiftManagerProject.Controllers
             if(scheduleParameters.Day == null & (Convert.ToInt32(scheduleParameters.DMorning) != 0 || Convert.ToInt32(scheduleParameters.DAfternoon) != 0 || Convert.ToInt32(scheduleParameters.DNight) != 0))
             {
                 return RedirectToAction("DayCreate", new { whattodo = true, require = true });
+            }
+            if(db.ScheduleParameters.Where(d=>d.Day == scheduleParameters.Day).Count() > 0)
+            {
+                return RedirectToAction("DayCreate", new { dayexists = true });
             }
            
             HsDelete.SpecialFixedFshiftDeletion();

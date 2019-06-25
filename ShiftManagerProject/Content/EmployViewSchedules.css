@@ -29,3 +29,11 @@ mark {
 label{
     color:black;
 }
+
+body {
+    color: black;
+}
+
+.bgtable{
+    background-color:whitesmoke;
+}

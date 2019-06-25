@@ -27,6 +27,9 @@
 
 <br />
 <h4>Week Settings</h4>
+<div class="alert alert-dismissible alert-info warningmsg padmsg">
+    Number of employees for each shift
+</div>
 <div class="table-responsive">
     <table class="table">
         <tr>
@@ -44,7 +47,7 @@
 
         @foreach (var item in Model.Where(f => f.Day == null))
         {
-            <tr>
+            <tr class="TBrows">
                 <td>
                     @Html.DisplayFor(modelItem => item.Morning)
                 </td>
@@ -66,6 +69,9 @@
 </div>
 <br /><br />
 <h4>Day Settings</h4>
+<div class="alert alert-dismissible alert-info warningmsg padmsg">
+    Additional Number of employees for a shift on a specific day
+</div>
 <div class="table-responsive">
     <table class="table">
         <tr>
@@ -86,7 +92,7 @@
 
         @foreach (var item in Model.Where(f => f.Day != null))
         {
-            <tr>
+            <tr class="TBrows">
                 <td>
                     @Html.DisplayFor(modelItem => item.Day)
                 </td>
@@ -111,6 +117,9 @@
 </div>
 <br /><br />
 <h4>Maximum Shifts</h4>
+<div class="alert alert-dismissible alert-info warningmsg padmsg">
+    Maximum shift types per employee
+</div>
 <div class="table-responsive">
     <table class="table">
         <tr>
@@ -128,7 +137,7 @@
 
         @foreach (var item in Model.Where(f => f.Day == null))
         {
-            <tr>
+            <tr class="TBrows">
                 <td>
                     @Html.DisplayFor(modelItem => item.MaxMorning)
                 </td>

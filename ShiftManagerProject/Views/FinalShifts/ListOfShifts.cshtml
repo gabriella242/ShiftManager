@@ -3,15 +3,111 @@
 @{
     ViewBag.Title = "Admin-List";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    List<SelectListItem> employees = new List<SelectListItem>();
+    employees.Add(new SelectListItem { Text = "All", Value = "All" });
+    foreach (var item in Model)
+    {
+        employees.Add(new SelectListItem
+        {
+            Text = item.Name,
+            Value = item.Name
+        });
+    };
 }
 
 <br /><br />
 <h2>Admin - List</h2>
+<div class="alert alert-dismissible alert-danger warningmsg">
+    List of employee preferences
+</div>
 <br /><br />
 
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="~/Content/ListOfShifts.css" />
 
+<div class="container">
+    <div class="row pads">
+        <a class="btn btn-success" data-toggle="modal" href="#ignismyModal">Message Employees</a>
+        <div class="modal fade" id="ignismyModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label=""><span>×</span></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="thank-you-pop">
+                            <h1>Message</h1>
+                            <form accept-charset="UTF-8" action="Message" method="POST">
+                                <h6>@Html.DropDownList("employees", employees, "--Select Employee--", new { @class = "control-label col-md-2 dropdownboxes" })</h6>
+                                <textarea class="span4" id="new_message" name="new_message"
+                                          placeholder="Type in your message" rows="5"></textarea>
+                                <h6></h6>
+                                <label for="info" class="btn btn-info">SMS <input type="checkbox" id="info" class="badgebox" name="sms" value="true"><span class="badge">&check;</span></label>
+                                <label for="success" class="btn btn-success">EMAIL <input type="checkbox" id="success" class="badgebox" value="true" name="email"><span class="badge">&check;</span></label>
+                                <h6 class="pull-right"></h6>
+                                <button class="btn btn-outline-danger" type="submit" id="loadmsg">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card border-danger golge heig sidenav">
+    <div class="card-header">
+        <a class="isteColor">
+            <h5 class="text-center m-2" style="font-weight: bold">Messages</h5>
+        </a>
+    </div>
+    <div class="card-body heig">
+        <div class="carousel vert slide" data-ride="carousel" data-interval="2000">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <ul class="timeline">
+                        @foreach (var msg in Model.Where(d => d.Message != null).Take(3))
+                        {
+                            <li>
+                                <a class="pad" target="_blank" href="@Url.Action("Edit", "ShiftPrefs", new { id = msg.ID })">@msg.Name</a>
+                                <p class="article pad">
+                                    @msg.Message
+                                </p>
+                            </li>
+                            <hr>
+
+                        }
+                    </ul>
+                </div>
+                <div class="carousel-item">
+                    <ul class="timeline">
+                        @{ int z = 0;}
+                        @foreach (var msg in Model.Where(d => d.Message != null))
+                        {
+                            z++;
+                            if (z > 3)
+                            {
+                                <li>
+                                    <a class="pad" target="_blank" href="@Url.Action("Edit", "ShiftPrefs", new { id = msg.ID })">@msg.Name</a>
+                                    <p class="article pad">
+                                        @msg.Message
+                                    </p>
+                                </li>
+                                <hr>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="d-flex p-8 bg-secondary text-white">
     <table id="tablePreview" class="table table-hover table-bordered table-responsive table-condensed" style="text-align: center;">
         @{
@@ -97,20 +193,9 @@
         @foreach (var item in Model)
         {
             <tr>
-                @if (item.Message != null)
-                {
-                    <td colspan="3">
-                        <mark>
-                            @Html.ActionLink(item.Name, "Edit", "ShiftPrefs", new { id = item.ID }, new { @title = item.Message })
-                        </mark>
-                    </td>
-                }
-                else
-                {
-                    <td colspan="3">
-                        @Html.ActionLink(item.Name, "Edit", "ShiftPrefs", new { id = item.ID }, new { @title = item.Message })
-                    </td>
-                }
+                <td colspan="3">
+                    @Html.ActionLink(item.Name, "Edit", "ShiftPrefs", new { id = item.ID }, new { @title = item.Message })
+                </td>
                 <td>
                     @if (item.Morning1 == true)
                     {
@@ -243,11 +328,13 @@
     </table>
 </div>
 
+<div id="se-pre-con"></div>
+
 @{
     if (@ViewBag.closed != 0)
     {
         <p>
-            @Html.ActionLink("Officially Close Week", "NewClose", "FinalShifts", new { @class = "btn btn-outline-info" })
+            <a class="btn btn-info" id="loadNow" href="@Url.Action("NewClose", "FinalShifts")">Officially Close Week</a>
         </p>
     }
     else
@@ -255,3 +342,21 @@
 
     }
 }
+
+<script>
+        $(document).ready(function () {
+
+            $("#loadmsg").click(function () {
+                document.getElementById("se-pre-con").classList.add("se-pre-con");
+                myVar = setTimeout(showPage, 85000);
+                });
+
+            $("#loadNow").click(function () {
+                document.getElementById("se-pre-con").classList.add("se-pre-con");
+                myVar = setTimeout(showPage, 85000);
+            });
+            function showPage() {
+                document.getElementById("se-pre-con").classList.remove("se-pre-con");
+            }
+    });
+</script>

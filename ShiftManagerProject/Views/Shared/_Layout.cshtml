@@ -15,19 +15,75 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
+    <style>
+        .top_bar {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            background: #283290;
+        }
+
+        .top_bar_content {
+            width: 100%;
+            height: 48px;
+            padding-left: 214px;
+        }
+
+        .top_bar_item {
+            margin-left: 33px;
+        }
+
+            .top_bar_item a {
+                font-size: 14px;
+                color: #FFFFFF;
+                -webkit-transition: all 200ms ease;
+                -moz-transition: all 200ms ease;
+                -ms-transition: all 200ms ease;
+                -o-transition: all 200ms ease;
+                transition: all 200ms ease;
+            }
+
+            .top_bar_item:first-child {
+                margin-left: 37px;
+            }
+
+        .emergencies {
+            height: 100%;
+            background: #ff0030;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 700;
+            padding-left: 38px;
+            padding-right: 38px;
+        }
+    </style>
 </head>
 
 <body>
+    @*<div class="top_bar">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="top_bar_content d-flex flex-row align-items-center justify-content-start">
+                            <div class="top_bar_item"><a href="#">FAQ</a></div>
+                            <div class="top_bar_item"><a href="#">Request an Appointment</a></div>
+                            <div class="emergencies  d-flex flex-row align-items-center justify-content-start ml-auto">Switch Shifts</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
     <div class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <div class="navbar-brand" style="width:120px;">
-                    @Html.ActionLink("NOC Shift Manager", "Index", "Home", new { area = "" }, new { @class = "navbar-brand logo" })
-                    <div class="hidden-lg-up my-2 mr-3">
+                @Html.ActionLink("NOC Shift Manager", "Index", "Home", new { area = "" }, new { @class = "navbar-brand logo" })
+                <div class="hidden-lg-up my-2 mr-3">
                     <button class="navbar-toggler side_menubtn " type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                 </div>
-                </div>
+            </div>
 
             <div class="collapse navbar-collapse" id="navbarColor03">
                 <ul class="navbar-nav mr-auto">
@@ -94,25 +150,25 @@
                         }
                     </li>
 
-                        <li class="nav-item ml-auto rightsidelog" id="fullscr">
-                            @if (System.Web.HttpContext.Current.Session["UserSess"] != null)
-                            {
-                                @Html.ActionLink("Log Out", "Logout", "Home")
-                            }
-                            else
-                            {
-                                @*@Html.ActionLink("Log In", "Index", "Home")*@
-                            }
-                        </li>
-                        <li class="nav-item ml-auto namestyle rightsidename" id="fullscr2">
-                            @if (System.Web.HttpContext.Current.Session["UserSess"] != null)
-                            {
-                                <strong>Howdy @Html.Encode(Session["UserSess"]) !</strong>
-                            }
-                        </li>
- 
+                    <li class="nav-item ml-auto rightsidelog" id="fullscr">
+                        @if (System.Web.HttpContext.Current.Session["UserSess"] != null)
+                        {
+                            @Html.ActionLink("Log Out", "Logout", "Home")
+                        }
+                        else
+                        {
+                            
+                        }
+                    </li>
+                    <li class="nav-item ml-auto namestyle rightsidename" id="fullscr2">
+                        @if (System.Web.HttpContext.Current.Session["UserSess"] != null)
+                        {
+                            <strong>Howdy @Html.Encode(Session["UserSess"])</strong>
+                        }
+                    </li>
+
                 </ul>
-                </div>
+            </div>
         </div>
     </div>
     <br /><br />

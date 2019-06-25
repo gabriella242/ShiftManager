@@ -7,6 +7,15 @@
     direction: ltr;
 }
 
+body {
+    -webkit-font-smoothing: antialiased !important;
+    -webkit-text-stroke: 1px rgba(0,0,0,0.1);
+    background-image: url(Images/background-desk-desktop-background-1097930.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color:black;
+}
+
 .namestyle {
     font-family: 'Kalam', cursive;
     color: mediumpurple;
@@ -18,9 +27,10 @@
     right: 5%;
 }
 
-.rightsidename{
-    position:absolute;
-    right:20%;
+.rightsidename {
+    position: absolute;
+    right: 20%;
+    left: 70%;
 }
 
 .rightsidelog {
@@ -28,10 +38,14 @@
     right: 30%;
 }
 
+.picbar{
+
+}
+
+
 @media only screen and (max-width: 575px) {
     .rightsidename {
-        position: relative;
-        right: -5;
+        position: inherit !important;
     }
 
     .rightsidelog {
@@ -46,8 +60,21 @@
     }
 }
 
-@media only screen and (max-width: 1024px) {
-    .rightsidename{
-        right:75px !important;
+@media only screen and (max-width: 1366px) {
+    .rightsidename {
+        position: inherit !important;
+        /*padding-top: 5%;*/
     }
+    .rightsidelog {
+  
+        right: 75px !important;
+        padding-left: 5%;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .rightsidelog {
+        position: inherit !important;
+    }
+
 }

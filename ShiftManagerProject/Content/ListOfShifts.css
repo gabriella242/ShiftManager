@@ -36,6 +36,9 @@ td:hover {
 h2{
     text-align:center;
 }
+.warningmsg{
+    text-align:center;
+}
 
 td:hover {
     background-color: lightgrey;
@@ -75,4 +78,271 @@ h6 > .divider:before,
 .h6 > .divider:before {
     color: #777;
     content: "\0223E\0020";
+}
+
+
+
+
+
+
+.no-js #loader {
+    display: none;
+}
+
+.js #loader {
+    display: block;
+    position: absolute;
+    left: 100px;
+    top: 0;
+}
+
+.se-pre-con {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url(/Content/Images/Ellipsis-1.8s-200px.gif) center no-repeat rgba(255,255,255, 0.6);
+}
+
+.dropdownboxes {
+    max-width: none !important;
+    width: 45%;
+    margin-bottom: 3%;
+    font-size: 15px;
+}
+
+.thank-you-pop {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+    .thank-you-pop img {
+        width: 76px;
+        height: auto;
+        margin: 0 auto;
+        display: block;
+        margin-bottom: 25px;
+    }
+
+    .thank-you-pop h1 {
+        font-size: 42px;
+        margin-bottom: 25px;
+        color: #5C5C5C;
+    }
+
+    .thank-you-pop p {
+        font-size: 20px;
+        margin-bottom: 27px;
+        color: #5C5C5C;
+    }
+
+    .thank-you-pop h3.cupon-pop {
+        font-size: 25px;
+        margin-bottom: 40px;
+        color: #222;
+        display: inline-block;
+        text-align: center;
+        padding: 10px 20px;
+        border: 2px dashed #222;
+        clear: both;
+        font-weight: normal;
+    }
+
+        .thank-you-pop h3.cupon-pop span {
+            color: #03A9F4;
+        }
+
+    .thank-you-pop a {
+        display: inline-block;
+        margin: 0 auto;
+        padding: 9px 20px;
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 14px;
+        background-color: #8BC34A;
+        border-radius: 17px;
+    }
+
+        .thank-you-pop a i {
+            margin-right: 5px;
+            color: #fff;
+        }
+
+#ignismyModal .modal-header {
+    border: 0px;
+}
+
+textarea {
+    height: 250px;
+    width: 250px;
+}
+
+.badgebox {
+    opacity: 0;
+}
+
+    .badgebox + .badge {
+        /* Move the check mark away when unchecked */
+        text-indent: -999999px;
+        /* Makes the badge's width stay the same checked and unchecked */
+        width: 27px;
+        background-color: white;
+        color: black;
+    }
+
+    .badgebox:focus + .badge {
+        /* Set something to make the badge looks focused */
+        /* This really depends on the application, in my case it was: */
+        /* Adding a light border */
+        box-shadow: inset 0px 0px 5px;
+        /* Taking the difference out of the padding */
+    }
+
+    .badgebox:checked + .badge {
+        /* Move the check mark back when checked */
+        text-indent: 0;
+    }
+
+.pads {
+    padding-bottom: 1%;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+    position: relative;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: 1s;
+    animation-name: animatebottom;
+    animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+    from {
+        bottom: -100px;
+        opacity: 0
+    }
+
+    to {
+        bottom: 0px;
+        opacity: 1
+    }
+}
+
+@keyframes animatebottom {
+    from {
+        bottom: -100px;
+        opacity: 0
+    }
+
+    to {
+        bottom: 0;
+        opacity: 1
+    }
+}
+
+
+
+.isteColor {
+    color: red;
+}
+
+    .isteColor:hover {
+        color: #353A40;
+    }
+
+ul.timeline {
+    list-style-type: none;
+    position: relative;
+}
+
+    ul.timeline:before {
+        content: ' ';
+        background: #d4d9df;
+        display: inline-block;
+        position: absolute;
+        left: 29px;
+        width: 2px;
+        height: 100%;
+        z-index: 400;
+    }
+
+    ul.timeline > li {
+        margin: 20px 0;
+        padding-left: 20px;
+    }
+
+        ul.timeline > li:before {
+            content: ' ';
+            background: white;
+            display: inline-block;
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid red;
+            left: 20px;
+            width: 20px;
+            height: 20px;
+            z-index: 400;
+        }
+
+vertical carousel
+.vert .carousel-item-next.carousel-item-left,
+.vert .carousel-item-prev.carousel-item-right {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+/*.vert .carousel-item-next,
+.vert .active.carousel-item-right {
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100% 0);
+}
+
+.vert .carousel-item-prev,
+.vert .active.carousel-item-left {
+    -webkit-transform: translate3d(0,-100%, 0);
+    transform: translate3d(0,-100%, 0);
+}*/
+
+.heig {
+    height: 483px;
+}
+
+.sidenav {
+    height: 50%;
+    width: 250px;
+    position: fixed;
+    z-index: 1;
+    top: 40%;
+    left: 0;
+    overflow-x: hidden;
+}
+
+
+@media only screen and (max-width: 1366px) {
+    .sidenav{
+        display:none !important;
+    }
 }

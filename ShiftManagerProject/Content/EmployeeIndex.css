@@ -20,3 +20,11 @@ table {
 .bold {
     font-weight: 600;
 }
+
+body {
+    color: black;
+}
+
+.TBrows{
+    background-color:whitesmoke;
+}

@@ -20,7 +20,7 @@
     </div>
           <br />
             <div class='table-responsive'>
-                <table class="table table-hover">
+                <table class="table">
                     <tr class="tablehead">
                         <th>
                             @Html.DisplayNameFor(model => model.ID)
@@ -33,6 +33,9 @@
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Telephone)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.Pass)
@@ -48,7 +51,7 @@
 
                     @foreach (var item in Model)
                     {
-                    <tr>
+                    <tr class="TBrows">
                         <td>
                             @Html.DisplayFor(modelItem => item.ID)
                         </td>
@@ -60,6 +63,9 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Telephone)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Pass)

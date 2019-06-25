@@ -18,6 +18,8 @@ namespace ShiftManagerProject.Controllers
         static Random rnd = new Random();
         static int DaySerial = 0;
         static int[,] Mat;
+        static int[,] TPrefMat;
+        static int[,] FPrefMat;
 
         public int OfDayHandler(bool whattodo, int d, int s)
         {
@@ -906,10 +908,10 @@ namespace ShiftManagerProject.Controllers
                 {
                     if (!FutureShifts(x, y, employ))
                     {
-                        foreach (var shift in pref.GetType().GetProperties())
+                        foreach (var shift in pref.GetType().GetProperties().Where(f=>f.Name.EndsWith(Convert.ToString(x)) && f.Name.StartsWith(y) && (Boolean)f.GetValue(pref) == true).ToList())
                         {
-                            if (shift.Name.EndsWith(Convert.ToString(x)) && shift.Name.StartsWith(y))
-                            {
+                            //if (shift.Name.EndsWith(Convert.ToString(x)) && shift.Name.StartsWith(y))
+                            //{
                                 shiftofday = shift.Name;
                                 shiftofday = shiftofday.Remove(shiftofday.Length - 1);
 
@@ -919,8 +921,8 @@ namespace ShiftManagerProject.Controllers
                                     Workers.Add(employ);
                                     break;
                                 }
-                                break;
-                            }
+                                //break;
+                            //}
                         }
                     }
                 }
@@ -985,7 +987,6 @@ namespace ShiftManagerProject.Controllers
             }
 
             return Fshift;
-
         }
 
         public void AssignDayType(FinalShift Fshift)
@@ -1006,21 +1007,142 @@ namespace ShiftManagerProject.Controllers
             }
         }
 
-        public void LeastShiftPref()
+        public void EmployeePrefChecker()
         {
-            ShiftPref prefshifts = new ShiftPref();
-            List<Employees> employees = db.Employees.ToList();
+            TPrefMat = new int[3, 7];
+            FPrefMat = new int[3, 7];
+            int s = 0, d = 0;
+
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning1 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon1 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night1 == true).Count();
+
+            s = 0; d++;
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning2 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon2 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night2 == true).Count();
+
+            s = 0; d++;
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning3 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon3 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night3 == true).Count();
+
+            s = 0; d++;
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning4 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon4 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night4 == true).Count();
+
+            s = 0; d++;
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning5 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon5 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night5 == true).Count();
+
+            s = 0; d++;
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning6 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon6 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night6 == true).Count();
+
+            s = 0; d++;
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning7 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon7 == true).Count();
+            TPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night7 == true).Count();
+
+
+            s = 0; d = 0;
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning1 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon1 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night1 == false).Count();
+            s = 0; d++;
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning2 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon2 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night2 == false).Count();
+            s = 0; d++;
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning3 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon3 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night3 == false).Count();
+            s = 0; d++;
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning4 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon4 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night4 == false).Count();
+            s = 0; d++;
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning5 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon5 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night5 == false).Count();
+            s = 0; d++;
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning6 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon6 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night6 == false).Count();
+            s = 0; d++;
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Morning7 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Afternoon7 == false).Count();
+            FPrefMat[s++, d] = db.ShiftPref.Where(x => x.Night7 == false).Count();
+        }
+
+        public string ShiftGen()
+        {
+                int max = FPrefMat.Cast<int>().Max();
+                string shift = null;
+
+                if (max != 0)
+                {
+                    for (int x = 0; x < 3; x++)
+                    {
+                        for (int y = 0; y < 7; y++)
+                        {
+                            if (FPrefMat[x, y].Equals(max))
+                            {
+                                //FPrefMat[x, y] = 0;
+                                ++y; ++x;
+                                shift = x.ToString() + y.ToString();
+                                return shift;
+                            }
+                        }
+                    }
+                }
+                else if(TPrefMat.Cast<int>().Min() != 99)
+                {
+                    int min = TPrefMat.Cast<int>().Min();
+                    for (int x = 0; x < 3; x++)
+                    {
+                        for (int y = 0; y < 7; y++)
+                        {
+                            if (TPrefMat[x, y].Equals(min))
+                            {
+                                //TPrefMat[x, y] = 99;
+                                ++y; ++x;
+                                shift = x.ToString() + y.ToString();
+                                return shift;
+                            }
+                        }
+                    }
+                }
+
+                return shift;
+        }
+
+        public void MarkShiftGen(int x, int y)
+        {
+                TPrefMat[x, y-1] = 99;
+
+                FPrefMat[x, y-1] = 0;
+        }
+
+        public void NewLChecker()
+        {
+            //ShiftPref prefshifts = new ShiftPref();
+            //List<Employees> employees = db.Employees.ToList();
             var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
             var val = false;
             FinalShift NewFinalS = new FinalShift();
             List<string> FirstLetter = new List<string>(new string[] { "", "M", "A", "N" });
-            int[] counter = new int[4], TrueCounter = new int[4];
-            int i, j = 0, y = 0, max = 0, TrueMax = 0;
-            var dayparameters = db.ScheduleParameters.Where(o => o.Day != null).Any() ? db.ScheduleParameters.Where(o => o.Day != null).Select(o => o.Day).ToList().Last() : null;
-            if (dayparameters != null)
-            { for (i = 1; DayOfWeek(i) != dayparameters; i++) ; }
-            else { i = 1; }
-            var daynumber = i;
+            //int[] counter = new int[4], TrueCounter = new int[4];
+            int i, j = 0, y = 0;
+            //var dayparameters = db.ScheduleParameters.Where(o => o.Day != null).Any() ? db.ScheduleParameters.Where(o => o.Day != null).Select(o => o.Day).ToList().Last() : null;
+            //if (dayparameters != null)
+            //{ for (i = 1; DayOfWeek(i) != dayparameters; i++) ; }
+            //else { i = 1; }
+            //var daynumber = i;
+            EmployeePrefChecker();
 
             OfDayHandler(true, 0, 0);
             if (db.FinalShift.Count() > 0 && db.FinalShift.Count() < totalshifts)
@@ -1032,94 +1154,31 @@ namespace ShiftManagerProject.Controllers
                     y = shift.Morning == true ? 1 : shift.Afternoon == true ? 2 : 3;
 
                     OrderOfDayTypeHandler(i, y);
+                    //MarkShiftGen(y,i);
                 }
             }
 
-            for (i = 1; i < 8; i++)
+
+            for (int s = 0; s < totalshifts*2; s++)
             {
-                if(!CheckDayShiftsExist(DayOfWeek(i)))
+                string gen = ShiftGen();
+                if(gen != null)
                 {
-                    foreach (var employ in employees)
+                    int day = Convert.ToInt32(gen.Substring(1, 1));
+                    int shift = Convert.ToInt32(gen.Substring(0, 1));
+
+                    if (!(NewExistForNewCheckerP(day, FirstLetter[shift])))
                     {
-                        prefshifts = db.ShiftPref.SingleOrDefault(ShiftPref => ShiftPref.EmployID == employ.ID);
-                        if (prefshifts == null)
-                        {
-                            continue;
-                        }
-
-                        foreach (var shifts in prefshifts.GetType().GetProperties())
-                        {
-                            if (shifts.Name.EndsWith(Convert.ToString(i)) && !(NewExistForNewCheckerP(i, shifts.Name.Substring(0, 1))))
-                            {
-                                //if (NewExistForNewCheckerP(i, shifts.Name.Substring(0, 1)))
-                                //{ continue; }
-
-                                val = (Boolean)shifts.GetValue(prefshifts);
-
-                                switch (shifts.Name.Substring(0, 1))
-                                {
-                                    case "M":
-                                        if (!val)
-                                        {
-                                            counter[1] += 1;
-                                        }
-                                        else
-                                        {
-                                            TrueCounter[1] += 1;
-                                        }
-                                        break;
-                                    case "A":
-                                        if (!val)
-                                        {
-                                            counter[2] += 1;
-                                        }
-                                        else
-                                        {
-                                            TrueCounter[2] += 1;
-                                        }
-                                        break;
-                                    case "N":
-                                        if (!val)
-                                        {
-                                            counter[3] += 1;
-                                        }
-                                        else
-                                        {
-                                            TrueCounter[3] += 1;
-                                        }
-                                        break;
-                                }
-                            }
-                        }
-                    }
-
-                    DayOfWeek day = new System.DayOfWeek();
-                    string dday = DayOfWeek(i);
-
-                    for (int d = 0; d < 7; d++)
-                    {
-                        if (day.ToString() != dday)
-                        {
-                            day = (DayOfWeek)((d + 1) % 7);
-                        }
-                        else { break; }
-                    }
-
-                    max = counter.ToList().IndexOf(counter.Max());
-                    TrueMax = TrueCounter.ToList().IndexOf(TrueCounter.Max());
-
-                    if (counter.Max() > 0)
-                    {
-                        NewFinalS = NewCheckerP(i, FirstLetter[max]);
+                        NewFinalS = NewCheckerP(day, FirstLetter[shift]);
                         if (NewFinalS == null)
                         {
                             NewFinalS = new FinalShift
                             {
                                 EmployID = 0,
                                 Name = null,
-                                Day = DayOfWeek(i)
+                                Day = DayOfWeek(day)
                             };
-                            switch (FirstLetter[max])
+                            switch (FirstLetter[shift])
                             {
                                 case "M":
                                     NewFinalS.Morning = true;
@@ -1132,51 +1191,209 @@ namespace ShiftManagerProject.Controllers
                                     break;
                             }
                         }
-                        NewFinalS.OfDayType = OrderOfDayTypeHandler(i, max);
-                        NewFinalS.Dates = NextWeeksDates(day);
-                        db.FinalShift.Add(NewFinalS);
-                        db.SaveChanges();
-                    }
-                    else if (TrueCounter.Max() > 0 && counter.Max() == 0)
-                    {
-                        NewFinalS = NewCheckerP(i, FirstLetter[TrueMax]);
-                        if (NewFinalS == null)
+
+                        NewFinalS.OfDayType = OrderOfDayTypeHandler(day, shift);
+
+
+                        DayOfWeek dayofweek = new System.DayOfWeek();
+                        string dday = DayOfWeek(day);
+
+                        for (int d = 0; d < 7; d++)
                         {
-                            NewFinalS = new FinalShift
+                            if (dayofweek.ToString() != dday)
                             {
-                                EmployID = 0,
-                                Name = null,
-                                Day = DayOfWeek(i)
-                            };
-                            switch (FirstLetter[TrueMax])
-                            {
-                                case "M":
-                                    NewFinalS.Morning = true;
-                                    break;
-                                case "A":
-                                    NewFinalS.Afternoon = true;
-                                    break;
-                                case "N":
-                                    NewFinalS.Night = true;
-                                    break;
+                                dayofweek = (DayOfWeek)((d + 1) % 7);
                             }
+                            else { break; }
                         }
-                        NewFinalS.OfDayType = OrderOfDayTypeHandler(i, TrueMax);
-                        NewFinalS.Dates = NextWeeksDates(day);
+                        NewFinalS.Dates = NextWeeksDates(dayofweek);
                         db.FinalShift.Add(NewFinalS);
                         db.SaveChanges();
                     }
-
-                    counter[0] = counter[1] = counter[2] = counter[3] = 0;
-                    TrueCounter[0] = TrueCounter[1] = TrueCounter[2] = TrueCounter[3] = 0;
-
-                    j++;
-
-                    i = j + 1 < (totalshifts + daynumber) ? i : 9;
-                    i = i + 1 == 8 ? 0 : i;
-                }            
+                }
+                else
+                {
+                    break;
+                }
             }
+
         }
+
+        //public void LeastShiftPref()
+        //{
+        //    ShiftPref prefshifts = new ShiftPref();
+        //    List<Employees> employees = db.Employees.ToList();
+        //    var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
+        //    var val = false;
+        //    FinalShift NewFinalS = new FinalShift();
+        //    List<string> FirstLetter = new List<string>(new string[] { "", "M", "A", "N" });
+        //    int[] counter = new int[4], TrueCounter = new int[4];
+        //    int i, j = 0, y = 0, max = 0, TrueMax = 0;
+        //    var dayparameters = db.ScheduleParameters.Where(o => o.Day != null).Any() ? db.ScheduleParameters.Where(o => o.Day != null).Select(o => o.Day).ToList().Last() : null;
+        //    if (dayparameters != null)
+        //    { for (i = 1; DayOfWeek(i) != dayparameters; i++) ; }
+        //    else { i = 1; }
+        //    var daynumber = i;
+        //    EmployeePrefChecker();
+
+        //    OfDayHandler(true, 0, 0);
+        //    if (db.FinalShift.Count() > 0 && db.FinalShift.Count() < totalshifts)
+        //    {
+        //        var FixedShifts = db.FinalShift.ToList();
+        //        foreach (var shift in FixedShifts)
+        //        {
+        //            for (i = 1; DayOfWeek(i) != shift.Day; i++) ;
+        //            y = shift.Morning == true ? 1 : shift.Afternoon == true ? 2 : 3;
+
+        //            OrderOfDayTypeHandler(i, y);
+        //        }
+        //    }
+
+        //    for (i = 1; i < 8; i++)
+        //    {
+        //        if (!CheckDayShiftsExist(DayOfWeek(i)))
+        //        {
+        //            //foreach (var employ in employees)
+        //            //{
+        //            //    prefshifts = db.ShiftPref.SingleOrDefault(ShiftPref => ShiftPref.EmployID == employ.ID);
+        //            //    if (prefshifts == null)
+        //            //    {
+        //            //        continue;
+        //            //    }
+
+        //            //    foreach (var shifts in prefshifts.GetType().GetProperties().ToList().Where(p => p.Name.EndsWith(Convert.ToString(i)) && !(NewExistForNewCheckerP(i, p.Name.Substring(0, 1)))))
+        //            //    {
+        //            //        //shifts.Name.EndsWith(Convert.ToString(i)) &&
+        //            //        //if (!(NewExistForNewCheckerP(i, shifts.Name.Substring(0, 1))))
+        //            //        //{
+
+        //            //        //if (NewExistForNewCheckerP(i, shifts.Name.Substring(0, 1)))
+        //            //        //{ continue; }
+
+
+        //            //        val = (Boolean)shifts.GetValue(prefshifts);
+
+        //            //        switch (shifts.Name.Substring(0, 1))
+        //            //        {
+        //            //            case "M":
+        //            //                if (!val)
+        //            //                {
+        //            //                    counter[1] += 1;
+        //            //                }
+        //            //                else
+        //            //                {
+        //            //                    TrueCounter[1] += 1;
+        //            //                }
+        //            //                break;
+        //            //            case "A":
+        //            //                if (!val)
+        //            //                {
+        //            //                    counter[2] += 1;
+        //            //                }
+        //            //                else
+        //            //                {
+        //            //                    TrueCounter[2] += 1;
+        //            //                }
+        //            //                break;
+        //            //            case "N":
+        //            //                if (!val)
+        //            //                {
+        //            //                    counter[3] += 1;
+        //            //                }
+        //            //                else
+        //            //                {
+        //            //                    TrueCounter[3] += 1;
+        //            //                }
+        //            //                break;
+        //            //        }
+        //            //        //}
+        //            //    }
+        //            //}
+
+        //            DayOfWeek day = new System.DayOfWeek();
+        //            string dday = DayOfWeek(i);
+
+        //            for (int d = 0; d < 7; d++)
+        //            {
+        //                if (day.ToString() != dday)
+        //                {
+        //                    day = (DayOfWeek)((d + 1) % 7);
+        //                }
+        //                else { break; }
+        //            }
+
+        //            max = counter.ToList().IndexOf(counter.Max());
+        //            TrueMax = TrueCounter.ToList().IndexOf(TrueCounter.Max());
+
+        //            if (counter.Max() > 0)
+        //            {
+        //                NewFinalS = NewCheckerP(i, FirstLetter[max]);
+        //                if (NewFinalS == null)
+        //                {
+        //                    NewFinalS = new FinalShift
+        //                    {
+        //                        EmployID = 0,
+        //                        Name = null,
+        //                        Day = DayOfWeek(i)
+        //                    };
+        //                    switch (FirstLetter[max])
+        //                    {
+        //                        case "M":
+        //                            NewFinalS.Morning = true;
+        //                            break;
+        //                        case "A":
+        //                            NewFinalS.Afternoon = true;
+        //                            break;
+        //                        case "N":
+        //                            NewFinalS.Night = true;
+        //                            break;
+        //                    }
+        //                }
+        //                NewFinalS.OfDayType = OrderOfDayTypeHandler(i, max);
+        //                NewFinalS.Dates = NextWeeksDates(day);
+        //                db.FinalShift.Add(NewFinalS);
+        //                db.SaveChanges();
+        //            }
+        //            else if (TrueCounter.Max() > 0 && counter.Max() == 0)
+        //            {
+        //                NewFinalS = NewCheckerP(i, FirstLetter[TrueMax]);
+        //                if (NewFinalS == null)
+        //                {
+        //                    NewFinalS = new FinalShift
+        //                    {
+        //                        EmployID = 0,
+        //                        Name = null,
+        //                        Day = DayOfWeek(i)
+        //                    };
+        //                    switch (FirstLetter[TrueMax])
+        //                    {
+        //                        case "M":
+        //                            NewFinalS.Morning = true;
+        //                            break;
+        //                        case "A":
+        //                            NewFinalS.Afternoon = true;
+        //                            break;
+        //                        case "N":
+        //                            NewFinalS.Night = true;
+        //                            break;
+        //                    }
+        //                }
+        //                NewFinalS.OfDayType = OrderOfDayTypeHandler(i, TrueMax);
+        //                NewFinalS.Dates = NextWeeksDates(day);
+        //                db.FinalShift.Add(NewFinalS);
+        //                db.SaveChanges();
+        //            }
+
+        //            counter[0] = counter[1] = counter[2] = counter[3] = 0;
+        //            TrueCounter[0] = TrueCounter[1] = TrueCounter[2] = TrueCounter[3] = 0;
+
+        //            j++;
+
+        //            i = j + 1 < (totalshifts + daynumber) ? i : 9;
+        //            i = i + 1 == 8 ? 0 : i;
+        //        }
+        //    }
+        //}
 
         public int OrderOfDayTypeHandler(int d, int s)
         {
@@ -1223,8 +1440,10 @@ namespace ShiftManagerProject.Controllers
                         //    return true;
                         //}
 
-                        if(futureShifts.Where(m => m.Morning == true).Count() == mo)
-                        { return true;  }
+                        if (futureShifts.Where(m => m.Morning == true).Count() == mo)
+                        { MarkShiftGen(0, x); return true; }
+                        else if(futureShifts.Where(m => m.Morning == true).Count()+1 == mo)
+                        { MarkShiftGen(0, x); }
                         break;
                     case "A":
                         //foreach (var shift in futureShifts.Where(a => a.Afternoon == true))
@@ -1236,7 +1455,9 @@ namespace ShiftManagerProject.Controllers
                         //    return true;
                         //}
                         if (futureShifts.Where(m => m.Afternoon == true).Count() == af)
-                        { return true; }
+                        { MarkShiftGen(1, x); return true; }
+                        else if(futureShifts.Where(m => m.Afternoon == true).Count()+1 == af)
+                        { MarkShiftGen(1, x); }
                         break;
                     case "N":
                         //foreach (var shift in futureShifts.Where(n => n.Night == true))
@@ -1248,10 +1469,27 @@ namespace ShiftManagerProject.Controllers
                         //    return true;
                         //}
                         if (futureShifts.Where(m => m.Night == true).Count() == ni)
-                        { return true; }
+                        { MarkShiftGen(2, x); return true; }
+                        else if(futureShifts.Where(m => m.Night == true).Count()+1 == ni)
+                        { MarkShiftGen(2, x); }
                         break;
                 }
             }
+                switch (y)
+                {
+                    case "M":
+                        if (mo == 1)
+                        { MarkShiftGen(0, x); }
+                        break;
+                    case "A":
+                        if (af == 1)
+                        { MarkShiftGen(1, x); }
+                        break;
+                    case "N":
+                        if (ni == 1)
+                        { MarkShiftGen(2, x); }
+                        break;
+                }
             return false;
         }
 
@@ -1387,8 +1625,8 @@ namespace ShiftManagerProject.Controllers
         public bool CheckDayShiftsExist(string day)
         {
             var settings = db.ScheduleParameters.Select(d => d.Morning + d.Afternoon + d.Night).Sum();
-            var Dsettings = db.ScheduleParameters.Where(g => g.Day != null).Count() != 0 ? db.ScheduleParameters.Where(f => f.Day == day).Select(w => w.DMorning + w.DAfternoon + w.DNight).Sum(): 0;
-            if(db.FinalShift.Where(x=>x.Day == day).Count() == settings + Dsettings)
+            var Dsettings = db.ScheduleParameters.Where(g => g.Day != null).Count() != 0 ? db.ScheduleParameters.Where(f => f.Day == day).Select(w => w.DMorning + w.DAfternoon + w.DNight).Sum() : 0;
+            if (db.FinalShift.Where(x => x.Day == day).Count() == settings + Dsettings)
             {
                 return true;
             }

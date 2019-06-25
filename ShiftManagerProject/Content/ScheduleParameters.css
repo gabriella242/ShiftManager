@@ -16,6 +16,10 @@ tr > th{
     top: 22%;
 }
 
+.TBrows {
+    background-color: white;
+}
+
 tr > td {
     color:black;
     text-align:center;
@@ -31,4 +35,10 @@ h4{
 
 strong{
     font-weight: 600;
+}
+.warningmsg {
+    text-align: center;
+}
+.padmsg{
+    margin-bottom:3%;
 }

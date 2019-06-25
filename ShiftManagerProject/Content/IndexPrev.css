@@ -21,6 +21,17 @@ table {
     text-align:center;
 }
 
+body {
+    color: black;
+    background-image: none !important;
+    background-color: lavenderblush;
+}
+
+.TBrows {
+    background-color: white;
+}
+
+
 @media only screen and (max-width: 414px) {
 
     .respon {

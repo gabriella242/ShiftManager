@@ -31,6 +31,11 @@ namespace ShiftManagerProject.Models
         [Required(ErrorMessage = "Email Required")]
         public string Email { get; set; }
 
+        [DataType(DataType.PhoneNumber)]
+        [DisplayName("Telephone")]
+        [Required(ErrorMessage = "Telephone Required")]
+        public string Telephone { get; set; }
+
         [DisplayName("Password")]
         [Required(ErrorMessage = "Password Required")]
         public string Pass { get; set; }
@@ -282,4 +287,5 @@ namespace ShiftManagerProject.Models
 
         public IEnumerable<Employees> Employees { get; set; }
     }
+
 }

@@ -11,6 +11,18 @@
     while (nextSunday.DayOfWeek != DayOfWeek.Sunday)
     { nextSunday = nextSunday.AddDays(1); }
     var NextWeek = Convert.ToDateTime(nextSunday).ToString("dd/MM/yyyy");
+
+
+    List<SelectListItem> employees = new List<SelectListItem>();
+    employees.Add(new SelectListItem { Text = "All", Value = "All" });
+    foreach (var item in Model.Select(d => d.Name).Distinct())
+    {
+        employees.Add(new SelectListItem
+        {
+            Text = item,
+            Value = item
+        });
+    };
 }
 
 <link rel="stylesheet" type="text/css" href="~/Content/FinalShiftIndex.css" />
@@ -30,6 +42,7 @@ else
     <br /><br />
     <h2>Next Week's Shifts - @NextWeek</h2>
     <br /><br />
+
     <div class="container">
         <div class="row">
             <div class="col">
@@ -59,7 +72,8 @@ else
     <div class='table-responsive'>
         <table id="tablePreview" class="table table-hover table-bordered table-condensed">
             <tr class="table-active headertbl">
-                <th>
+                <th style="text-align:center;">
+                    <p id="NoOfShifts"></p>
                 </th>
                 @foreach (var item in Model.Select(x => x.Day).Distinct())
                 {
@@ -69,7 +83,7 @@ else
                 }
             </tr>
 
-            <tr>
+            <tr class="bgcolor">
                 <td class="table-info bold">
                     @Html.DisplayNameFor(model => model.Morning)
                 </td>
@@ -96,7 +110,7 @@ else
 
             @{ counter = 1; }
 
-            <tr>
+            <tr class="bgcolor">
                 <td class="table-info bold">
                     @Html.DisplayNameFor(model => model.Afternoon)
                 </td>
@@ -124,7 +138,7 @@ else
 
             @{ counter = 1; }
 
-            <tr>
+            <tr class="bgcolor">
                 <td class="table-info bold">
                     @Html.DisplayNameFor(model => model.Night)
                 </td>
@@ -151,9 +165,79 @@ else
             </tr>
         </table>
     </div>
+    <div id="se-pre-con"></div>
 }
+
+    <div class="container">
+        <div class="row pads">
+            <a class="btn btn-info" data-toggle="modal" href="#ignismyModal">Message Employees</a>
+            <div class="modal fade" id="ignismyModal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label=""><span>×</span></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="thank-you-pop">
+                                <h1>Message</h1>
+                                <form accept-charset="UTF-8" action="@Url.Action("Message", "FinalShifts")" method="POST">
+                                    <h6>@Html.DropDownList("employees", employees, "--Select Employee--", new { @class = "control-label col-md-2 dropdownboxes" })</h6>
+                                    <textarea class="span4" id="new_message" name="new_message"
+                                              placeholder="Type in your message" rows="5"></textarea>
+                                    <h6></h6>
+                                    <label for="info" class="btn btn-info">SMS <input type="checkbox" id="info" class="badgebox" name="sms" value="true"><span class="badge">&check;</span></label>
+                                    <label for="success" class="btn btn-success">EMAIL <input type="checkbox" id="success" class="badgebox" value="true" name="email"><span class="badge">&check;</span></label>
+                                    <h6 class="pull-right"></h6>
+                                    <button class="btn btn-outline-danger" type="submit" id="loadmsg">Send Message</button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            @{
+                if (@ViewBag.admin != 0 && Model.Any())
+                {
+                    <h3>Offically Closed!</h3>
+                }
+                else
+                {
+                    if (Model.Any())
+                    {
+                        @Html.ActionLink("Submit", "Send", "", new { @class = "btn btn-outline-danger", @id = "loadNow" })
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
 <script>
     $(document).ready(function () {
+
+        $("#loadmsg").click(function () {
+            document.getElementById("se-pre-con").classList.add("se-pre-con");
+            myVar = setTimeout(showPage, 85000);
+        });
+
+        $("#loadNow").click(function () {
+            document.getElementById("se-pre-con").classList.add("se-pre-con");
+            myVar = setTimeout(showPage, 85000);
+        });
+
+        function showPage() {
+            document.getElementById("se-pre-con").classList.remove("se-pre-con");
+        }
+
         $('.dropdown-toggle').dropdown()
 
         $('a:contains("UpdateMe!")').addClass('badge badge-danger');
@@ -187,7 +271,7 @@ else
             for (var i = 0; i < curN; i++) {
                 elms[curClass][i].onmouseover = function () {
                     changeColor(this.className, "yellow");
-                    document.getElementById("NoOfShifts").innerHTML = num;
+                    document.getElementById("NoOfShifts").innerHTML = num + " Shifts";
                 };
                 elms[curClass][i].onmouseout = function () {
                     changeColor(this.className, "white");
@@ -198,26 +282,6 @@ else
 
     });
 </script>
-<br /><br />
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            @{
-                if (@ViewBag.admin != 0 && Model.Any())
-                {
-                    <h3>Offically Closed!</h3>
-                }
-                else
-                {
-                    if (Model.Any())
-                    {
-                        @Html.ActionLink("Submit", "Send", "", new { @class = "btn btn-outline-danger" })
-                    }
-                }
-            }
-        </div>
-    </div>
-</div>
 <br /><br />
 
 

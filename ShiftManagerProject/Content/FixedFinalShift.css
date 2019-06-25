@@ -7,3 +7,29 @@
 .dropdownboxes{
     max-width:55%;
 }
+
+.warningmsg {
+    text-align: center;
+}
+
+.padmsg {
+    margin-bottom: 5%;
+}
+
+
+
+.float-left{
+    padding-bottom:2%;
+}
+.table{
+    background-color:white;
+}
+
+body{
+    color:black;
+    font-weight:800;
+}
+
+.TBrows {
+    background-color: whitesmoke;
+}
