@@ -247,8 +247,8 @@ namespace ShiftManagerProject.Controllers
                 ShiftsBody += shift.Dates.ToString("dd/MM/yyyy") + " -> " + shift.Day + " " + (shift.Morning == true ? "Morning" : shift.Afternoon == true ? "Afternoon" : "Night") + ", ";
             }
 
-            const string accountSid = "ACf5f149a9c569d36575a2320d60ed4281";
-            const string authToken = "794bf494659491d04411de9f0ce64d72";
+            const string accountSid = "";
+            const string authToken = "";
             TwilioClient.Init(accountSid, authToken);
             var mediaUrl = 
             new Uri( "https://climacons.herokuapp.com/clear.png" );
@@ -259,7 +259,7 @@ namespace ShiftManagerProject.Controllers
                                                 | SecurityProtocolType.Ssl3;
             var message = MessageResource.Create(
               to: to,
-              from: new PhoneNumber("+18646101609"),
+              from: new PhoneNumber(" PHONE NUMBER"),
               body: "Your shifts for next week are: " + ShiftsBody);
             Console.WriteLine(message.Sid);
             //var totalshifts = db.ShiftsPerWeek.Select(o => o.NumOfShifts).FirstOrDefault();
@@ -525,8 +525,8 @@ namespace ShiftManagerProject.Controllers
         {
             if(sms == true)
             {
-                const string accountSid = "ACf5f149a9c569d36575a2320d60ed4281";
-                const string authToken = "794bf494659491d04411de9f0ce64d72";
+                const string accountSid = "";
+                const string authToken = "";
                 TwilioClient.Init(accountSid, authToken);
                 var mediaUrl =
                 new Uri("https://climacons.herokuapp.com/clear.png");
@@ -537,7 +537,7 @@ namespace ShiftManagerProject.Controllers
                                                     | SecurityProtocolType.Ssl3;
                 var message = MessageResource.Create(
                   to: to,
-                  from: new PhoneNumber("+18646101609"),
+                  from: new PhoneNumber(" PHONE NUMBER "),
                   body: "Important message from the manager:  " + new_message);
                 Console.WriteLine(message.Sid);
             }
